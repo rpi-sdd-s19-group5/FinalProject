@@ -4,24 +4,27 @@ services:
   db:
     image: postgres:11.1-alpine
     container_name: postgres01
-  # nginx:
-  #   image: nginx:1.13-alpine
-  #   container_name: nginx01
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - ./project:/src
-  #     - ./config/nginx:/etc/nginx/conf.d
-  #   depends_on:
-  #     - web
-  web:
+
+  nginx:
+    image: nginx:1.13-alpine
+    container_name: nginx01
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./project:/src
+      - ./config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - djangoapp
+
+  djangoapp:
     build: .
     container_name: django01
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8080"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn DjangoTest.wsgi -b 0.0.0.0:8080 --workers 3"
     depends_on:
       - db
     volumes:
       - ./project:/src
-    ports:
-      - "8080:8080"
+    expose:
+        - "8080"
     restart: always
+
