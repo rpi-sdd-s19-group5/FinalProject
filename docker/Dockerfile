@@ -3,7 +3,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
-    apk add postgresql-dev bash
+    apk add postgresql-dev postgresql-client bash
 
 RUN mkdir /config  
 ADD /config/requirements.txt /config/  

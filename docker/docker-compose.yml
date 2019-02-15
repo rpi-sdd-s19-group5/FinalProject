@@ -8,6 +8,7 @@ services:
       - ./data:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5432:5432"
+    restart: always
 
   nginx:
     image: nginx:1.13-alpine
@@ -17,16 +18,18 @@ services:
     volumes:
       - ./project:/src
       - ./config/nginx:/etc/nginx/conf.d
+    restart: always
     depends_on:
       - djangoapp
 
   djangoapp:
     build: .
     container_name: django01
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn DjangoTest.wsgi -b 0.0.0.0:8080 --workers 3"
+    command: sh -c '/scripts/start_up.sh db'
     depends_on:
-      - db
+      - db    
     volumes:
+      - ./scripts:/scripts
       - ./project:/src
     expose:
         - "8080"
