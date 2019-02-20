@@ -23,7 +23,9 @@ services:
       - djangoapp
 
   djangoapp:
-    build: .
+    build:
+      context: .
+      dockerfile: config/docker/django/Dockerfile
     container_name: django01
     command: sh -c '/scripts/start_up.sh db'
     depends_on:
