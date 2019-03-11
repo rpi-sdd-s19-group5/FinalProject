@@ -1,39 +1,36 @@
-import json
-import requests
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 
-#current just test statement for location, I will up load the full one within this week
+if __name__ == "__main__":
+    # Initial driver
+    chrome = webdriver.Chrome()
+    for num in range(1, 20):
+        url = "http://catalog.rpi.edu/content.php?catoid=18&catoid=18&navoid=444&filter%5Bitem_type%5D=3&filter" \
+              "%5Bonly_active%5D=1&filter%5B3%5D=1&filter%5Bcpage%5D=" + str(num) + "#acalog_template_course_filter"
+        chrome.get(url)
+        assert "Rensselaer" in chrome.title
+        trs = chrome.find_elements_by_css_selector("table.table_default")[6].find_element_by_tag_name("tbody"). \
+            find_elements_by_tag_name("tr")
+        index = trs.pop()
+        trs = trs[1:-1]
+        for course_link in trs:
+            # Open description
+            a_tag = course_link.find_element_by_tag_name("a")
+            # a_tag.click()
+            try:
+                # Wait for description by AJAX
+                content = WebDriverWait(course_link, 10).until(
+                    expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "div.ajaxcourseindentfix"))
+                )
+                print(content.text)
 
-#course url
-url = "http://catalog.rpi.edu/content.php?catoid=18&navoid=444"
+            except TimeoutException as e:
+                print("Elements not found")
+                break
 
-options = Options()
-options.add_argument("--headless")
-driver = webdriver.Chrome(chrome_options=options, executable_path='/usr/bin/chromedriver')
-driver.get(url)
-
-#get link to each course page
-link = driver.find_elements_by_tag_name("a")
-
-#for n in link:
-    #try1 = n.get_attribute('href')
-    #print try1
-    #drive.get(try1)
-
-#sample for each course page
-web = "http://catalog.rpi.edu/preview_course_nopop.php?catoid=18&coid=34363"
-driver.get(web)
-data = driver.find_elements_by_id('course_preview_title')
-for d in data:
-    print(d.text)
-
-#still in determine the range to get the needed information 
-
-#content = driver.find_elements_by_class_name("block_content")
-content = driver.find_elements_by_css_selector("table.table_default")
-for c in content:
-    print(c.text)
-
-print(data)
-
+    # Close drive
+    chrome.quit()
