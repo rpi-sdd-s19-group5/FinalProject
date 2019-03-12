@@ -22,12 +22,21 @@ services:
     depends_on:
       - djangoapp
 
+  selenium:
+    image: selenium/standalone-chrome
+    container_name: selenium01
+    expose: 
+      - "4444"
+
   djangoapp:
-    build: .
+    build:
+      context: .
+      dockerfile: config/docker/django/Dockerfile
     container_name: django01
     command: sh -c '/scripts/start_up.sh db'
     depends_on:
-      - db    
+      - db
+      - selenium    
     volumes:
       - ./scripts:/scripts
       - ./project:/src
