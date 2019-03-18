@@ -1,6 +1,7 @@
 import json
+import threading
 from typing import Dict
-
+from multiprocessing import Process, pool, cpu_count
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import DesiredCapabilities
@@ -8,17 +9,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-if __name__ == "__main__":
-    # course url
-    chrome = webdriver.Remote(
-        command_executor='http://selenium:4444/wd/hub',
-        desired_capabilities=DesiredCapabilities.CHROME)
-    # chrome = webdriver.Chrome()
-    courses_info = []
-    for num in range(1, 20):
+
+class MyThread(threading.Thread):
+    def __init__(self, num, dict):
+        threading.Thread.__init__(self)
+        self.num = num
+        self.dict = dict
+
+    def run(self):
+        chrome = webdriver.Remote(
+            command_executor='http://selenium:4444/wd/hub',
+            desired_capabilities=DesiredCapabilities.CHROME)
         url = "http://catalog.rpi.edu/content.php?catoid=18&catoid=18&navoid=444&filter%5Bitem_type%5D=3&filter" \
-              "%5Bonly_active%5D=1&filter%5B3%5D=1&filter%5Bcpage%5D=" + str(num) + "#acalog_template_course_filter"
+              "%5Bonly_active%5D=1&filter%5B3%5D=1&filter%5Bcpage%5D=" + str(self.num) + "#acalog_template_course_filter"
         chrome.get(url)
+        print(url)
         assert "Rensselaer" in chrome.title
         trs = chrome.find_elements_by_css_selector("table.table_default")[6].find_element_by_tag_name("tbody"). \
             find_elements_by_tag_name("tr")
@@ -55,16 +60,35 @@ if __name__ == "__main__":
                         course["cross_listed"] = line
                     elif "Credit Hours" in line:
                         course["credit_hours"] = line
-                courses_info.append(course)
-                print(course)
+                threadLock.acquire()
+                self.dict.append(course)
+                threadLock.release()
+                print("thread #" + str(self.num) + str(course))
 
             except TimeoutException as e:
                 print("Elements not found")
                 break
+        chrome.quit()
+
+if __name__ == "__main__":
+    # course url
+
+    #chrome = webdriver.Chrome()
+    thread_count = 2
+    #print("process count: " + str(process_count))
+    courses_info = []
+    processes = []
+    threadLock = threading.Lock()
+    for num in range(1, thread_count + 1):
+        processes.append(MyThread(num, courses_info))
+        processes[num-1].start()
+
+    for num in range(0, thread_count):
+        processes[num].join()
 
     # Close drive
     output = json.dumps(courses_info)
     with open("course_info.json", 'w') as outfile:
         json.dump(output, outfile, sort_keys=True, indent=4)
 
-    chrome.quit()
+
