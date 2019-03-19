@@ -38,6 +38,7 @@ class MyThread(threading.Thread):
                                       "credit_hours": ""}
             try:
                 # Wait for description by AJAX
+
                 content = WebDriverWait(course_link, 10).until(
                     expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "div.ajaxcourseindentfix"))
                 )

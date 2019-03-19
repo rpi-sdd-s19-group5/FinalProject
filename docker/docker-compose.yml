@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   db:
@@ -32,6 +32,7 @@ services:
     build:
       context: .
       dockerfile: config/docker/django/Dockerfile
+      shm_size: '2gb'
     container_name: django01
     command: sh -c '/scripts/start_up.sh db'
     depends_on:
