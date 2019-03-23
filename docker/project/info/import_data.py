@@ -17,6 +17,12 @@ if __name__ == '__main__':
         print(course)
         c = CourseInfo()
         c.title = course["title"]
+        c.dept = course["title"][0:4].upper()
+        print(c.dept)
+
+        c.course_code = course["title"][0:10]
+        print(c.course_code)
+
         c.description = course["description"]
         if not course["prerequisites"]:
             c.credit_hours = None
