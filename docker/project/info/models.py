@@ -31,3 +31,15 @@ class ProfInfo(models.Model):
     # Update time
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+class ProfAndCourses(models.Model):
+    course_code = models.CharField(max_length=20, default="")
+    dept = models.TextField()
+    code_digit = models.TextField()
+    prof = models.TextField()
+    section = models.TextField()
+    credit = models.TextField()
+    days = models.TextField()
+    time = models.TextField()
+    date = models.TextField()
+    location = models.TextField()
