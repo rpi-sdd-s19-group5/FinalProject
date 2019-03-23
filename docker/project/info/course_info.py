@@ -8,14 +8,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-if __name__ == "__main__":
-    # course url
+
+def course_info_crawler(output_json=False):
+    # initial driver
     chrome = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',
         desired_capabilities=DesiredCapabilities.CHROME)
     # chrome = webdriver.Chrome()
     courses_info = []
-    for num in range(1, 20):
+    for num in range(1, 1):
         url = "http://catalog.rpi.edu/content.php?catoid=18&catoid=18&navoid=444&filter%5Bitem_type%5D=3&filter" \
               "%5Bonly_active%5D=1&filter%5B3%5D=1&filter%5Bcpage%5D=" + str(num) + "#acalog_template_course_filter"
         chrome.get(url)
@@ -62,9 +63,20 @@ if __name__ == "__main__":
                 print("Elements not found")
                 break
 
-    # Close drive
-    output = json.dumps(courses_info)
-    with open("course_info.json", 'w') as outfile:
-        json.dump(output, outfile, sort_keys=True, indent=4)
+    # Output data to a json file
+    if output_json:
+        output = json.dumps(courses_info)
+        with open("course_info.json", 'w') as outfile:
+            json.dump(output, outfile, sort_keys=True, indent=4)
 
+    # Close drive
     chrome.quit()
+    return courses_info
+
+
+def main():
+    course_info_crawler()
+
+
+if __name__ == "__main__":
+    main()
