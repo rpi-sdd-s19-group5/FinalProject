@@ -186,14 +186,14 @@ def crawler_wrapper():
     jump = 0
 
     for t in try3:
-        print(t)
+        # print(t)
         # <--- uncommon will pull all list done
         # jump += 1
         if jump == 2: break
         try4 = get_url(get_driver(t), 2)
         for r in try4:
             name_list.append(r)
-            print(r)
+            # print(r)
 
     people_list = []
     for name in name_list:

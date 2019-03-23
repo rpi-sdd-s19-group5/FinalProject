@@ -16,8 +16,12 @@ def update_course_info(course):
     dept = course["title"][0:4].upper()
     course_code = course["title"].split('-', 1)[0].strip()
     description = course["description"]
+    try:
+        prerequisites = (None if not course["prerequisites"] else course["prerequisites"].split(" ", 1)[1])
+    except IndexError as e:
+        prerequisites = None
+        print("Prerequisites/Corequisites Error, Maybe format error")
 
-    prerequisites = (None if not course["prerequisites"] else course["prerequisites"].split(" ", 1)[1])
     offered = (None if not course["offered"] else course["offered"])
     cross_listed = (None if not course["cross_listed"] else course["cross_listed"])
 

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 
-
 # Create your models here.
 class CourseInfo(models.Model):
     title = models.CharField(max_length=200)
@@ -20,7 +19,7 @@ class CourseInfo(models.Model):
 class ProfInfo(models.Model):
     url = models.URLField(blank=True, null=True, max_length=255)
     name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100, blank=True, null=True)
+    title = models.TextField(blank=True, null=True)
     dept = models.TextField(blank=True, null=True)
     email = models.EmailField(max_length=254, blank=True, null=True)
     web_page = models.URLField(blank=True, null=True, max_length=255)
