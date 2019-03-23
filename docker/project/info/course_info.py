@@ -16,7 +16,7 @@ def course_info_crawler(output_json=False):
         desired_capabilities=DesiredCapabilities.CHROME)
     # chrome = webdriver.Chrome()
     courses_info = []
-    for num in range(1, 2):
+    for num in range(1, 20):
         url = "http://catalog.rpi.edu/content.php?catoid=18&catoid=18&navoid=444&filter%5Bitem_type%5D=3&filter" \
               "%5Bonly_active%5D=1&filter%5B3%5D=1&filter%5Bcpage%5D=" + str(num) + "#acalog_template_course_filter"
         chrome.get(url)
@@ -25,6 +25,7 @@ def course_info_crawler(output_json=False):
             find_elements_by_tag_name("tr")
         index = trs.pop()
         trs = trs[1:-1]
+        count = 0
         for course_link in trs:
             # Open description
             a_tag = course_link.find_element_by_tag_name("a")

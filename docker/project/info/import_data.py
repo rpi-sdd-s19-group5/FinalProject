@@ -14,20 +14,15 @@ from info.course_info import course_info_crawler
 if __name__ == '__main__':
     course_info = course_info_crawler()
     for course in course_info:
-        c = CourseInfo()
-        c.title = course["title"]
-        c.dept = course["title"][0:4].upper()
-        print(c.dept)
-
-        c.course_code = course["title"][0:10]
-        print(c.course_code)
-
-        c.description = course["description"]
-        c.prerequisites = course["prerequisites"]
-        c.offered = course["offered"]
-        c.cross_listed = course["cross_listed"]
-        if not course["credit_hours"]:
-            c.credit_hours = None
-        else:
-            c.credit_hours = int(re.findall("\d+", course["credit_hours"])[0])
-        c.save()
+        title = course["title"]
+        dept = course["title"][0:4].upper()
+        course_code = course["title"].split('-', 1)[0].strip()
+        description = course["description"]
+        prerequisites = (None if not course["prerequisites"] else course["prerequisites"].split(" ", 1)[1])
+        offered = (None if not course["offered"] else course["offered"])
+        cross_listed = (None if not course["cross_listed"] else course["cross_listed"])
+        credit_hours = (None if not course["credit_hours"] else int(re.findall("\d+", course["credit_hours"])[0]))
+        c, created = CourseInfo.objects.update_or_create(
+            title=title, dept=dept, course_code=course_code, description=description, prerequisites=prerequisites,
+            offered=offered, cross_listed=cross_listed, credit_hours=credit_hours
+        )
