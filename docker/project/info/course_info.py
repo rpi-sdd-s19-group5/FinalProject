@@ -25,8 +25,9 @@ def course_info_crawler(output_json=False):
             find_elements_by_tag_name("tr")
         index = trs.pop()
         trs = trs[1:-1]
+        count = 0
         for course_link in trs:
-            # Open description
+           # Open description
             a_tag = course_link.find_element_by_tag_name("a")
             a_tag.click()
             course: Dict[str, str] = {"title": "", "description": "", "prerequisites": "", "offered": "",
