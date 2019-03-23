@@ -4,6 +4,8 @@ from django.db import models
 # Create your models here.
 class CourseInfo(models.Model):
     title = models.CharField(max_length=200)
+    dept = models.CharField(max_length=20)
+    course_id = models.CharField(max_length=20)
     description = models.TextField()
     prerequisites = models.CharField(max_length=50, null=True, blank=True)
     offered = models.CharField(max_length=50, null=True, blank=True)
