@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+    {#    <script type="text/javascript" src="node_modules/angular/angular.js"></script>#}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
@@ -62,11 +62,11 @@
      style="margin-top: 100px; height: 250px; margin-left: 531px;">
 <div class="container">
     <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 50px;">
-        <form action="" method="get">
+        <form action="{% url "search_course" %}" method="get">
+            {% csrf_token %}
             <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
                 <div class="col-auto">
-
-                    <select class="custom-select" id="courseprefix" name="filter[27]" title="Choose a Course Prefix">
+                    <select class="custom-select" id="courseprefix" name="dept" title="Choose a Course Prefix">
                         <option value="-1">Departments</option>
                         <option value="ARCH">ARCH</option>
                         <option value="ARTS">ARTS</option>
