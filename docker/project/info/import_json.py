@@ -1,5 +1,4 @@
 import os
-import re
 import sys
 
 import django
@@ -8,10 +7,8 @@ sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
 if 'setup' in dir(django): django.setup()
 
-from info.models import CourseInfo
 from info.models import ProfAndCourses
 import json
-from typing import Dict
 
 
 def json_to_dict():
@@ -19,36 +16,49 @@ def json_to_dict():
     with open("info/19Spring.json") as json_file:
         data = json.load(json_file)
         for x in range(9, len(data) - 1):
-            print(data[x])
+            # print(data[x])
             if len(data[x]) == 0:
                 continue
             else:
-                entry: Dict[str, str] = {"course_code": "", "dept": "", "code_digit": "", "prof": "",
-                                         "section": "", "credit": "", "days": "", "time": "", "date": "",
-                                         "location": ""}
-                entry["dept"] = data[x]["Subj"]
-                entry["code_digit"] = data[x]["Crse"]
+                entry = {}
+                entry["dept"] = data[x]["Subj"].strip()
+                entry["code_digit"] = data[x]["Crse"].strip()
                 entry["course_code"] = entry["dept"] + " " + entry["code_digit"]
+                entry["section"] = data[x]["Sec"].strip()
+                entry["credit"] = data[x]["Cred"].strip()
+
+                # Check whether course has multiple sections
+                if not entry["dept"]:
+                    last = ProfAndCourses.objects.latest()
+                    entry["dept"] = last.dept
+                    entry["code_digit"] = last.code_digit
+                    entry["course_code"] = last.course_code
+                    entry["section"] = last.section
+                    entry["credit"] = last.credit
+
                 entry["prof"] = ' '.join(data[x]["Instructor"].split())
-                entry["section"] = data[x]["Sec"]
-                entry["credit"] = data[x]["Cred"]
                 entry["days"] = data[x]["Days"]
                 entry["time"] = data[x]["Time"]
-                entry["data"] = data[x]["Date"]
+                entry["date"] = data[x]["Date"]
                 entry["location"] = data[x]["Location"]
-                results.append(entry)
+
+                # Update in database item
+                ProfAndCourses.objects.bulk_create(results)
+                ProfAndCourses.objects.update_or_create(
+                    course_code=entry["course_code"], dept=entry["dept"], prof=entry["prof"],
+                    code_digit=entry["code_digit"],
+                    credit=entry["credit"],
+                    date=entry["date"], days=entry["days"], time=entry["time"], location=entry["location"],
+                    section=entry["section"]
+                )
+
     for entry in results:
-        temp = ProfAndCourses()
-        temp.course_code = entry["course_code"]
-        temp.dept = entry["dept"]
-        temp.code_digit = entry["code_digit"]
-        temp.credit = entry["credit"]
-        temp.date = entry["date"]
-        temp.days = entry["days"]
-        temp.time = entry["time"]
-        temp.location = entry["location"]
-        temp.section = entry["section"]
-        temp.save()
+        ProfAndCourses().objects.update_or_create(
+            course_code=entry["course_code"], dept=entry["dept"], prof=entry["prof"], code_digit=entry["code_digit"],
+            credit=entry["credit"],
+            date=entry["date"], days=entry["days"], time=entry["time"], location=entry["location"],
+            section=entry["section"]
+        )
 
 
 if __name__ == '__main__':
