@@ -6,6 +6,8 @@ from info.search_test import search_test_prof
 from django.template import loader
 from info.models import CourseInfo, ProfInfo
 
+from info.models import CourseInfo
+
 
 def index(request):
     return render(request, 'polls/main.html')
