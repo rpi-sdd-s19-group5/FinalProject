@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 
 # Create your models here.
@@ -32,14 +31,22 @@ class ProfInfo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+
 class ProfAndCourses(models.Model):
     course_code = models.CharField(max_length=20, default="")
-    dept = models.TextField()
-    code_digit = models.TextField()
-    prof = models.TextField()
-    section = models.TextField()
-    credit = models.TextField()
-    days = models.TextField()
-    time = models.TextField()
-    date = models.TextField()
-    location = models.TextField()
+    dept = models.TextField(blank=True, null=True)
+    code_digit = models.TextField(blank=True, null=True)
+    prof = models.TextField(blank=True, null=True)
+    section = models.TextField(blank=True, null=True)
+    credit = models.TextField(blank=True, null=True)
+    days = models.TextField(blank=True, null=True)
+    time = models.TextField(blank=True, null=True)
+    date = models.TextField(blank=True, null=True)
+    location = models.TextField(blank=True, null=True)
+
+    # Update time
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    class Meta:
+        get_latest_by = ['updated_at']
