@@ -8,7 +8,9 @@ def index(request):
     return render(request, 'polls/main.html')
 
 
-def course(request):
+def search_course(request):
+    if request.GET:
+        print(request.GET)
     return render(request, 'polls/search_course.html')
 
 
@@ -32,15 +34,7 @@ def test(request):
     print(course_result)
     return render(request, 'polls/search_course.html', context)
 
-course_result = search_test("materials", "arch")
-course_result = course_result[0:10]
-for result in course_result:
-    temp = result['description'].split()
-    temp2 = ""
-    for x in range(0, 30):
-        temp2 += temp[x]
-        temp2 += " "
-    temp2.strip()
-    temp2 += "..."
-    result['description'] = temp2
-    print(temp2)
+
+
+def test2(request):
+    return render(request, 'polls/course.html')
