@@ -66,10 +66,10 @@
 </nav>
 <div class="container">
     <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 100px;">
-        <form action="" method="get">
+        <form action="{% url "search_prof" %}" method="get">
             <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
                 <div class="col-auto">
-                    <select ng-model="dep" ng-init="dep = names[0]" ng-options="x for x in names"
+                    <select ng-model="dep" name="dept" ng-init="dep = names[0]" ng-options="x for x in names"
                             style="height: 38px;"></select>
                 </div>
                 <div class="col-auto">

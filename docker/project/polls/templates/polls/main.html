@@ -47,10 +47,10 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="./main.html">Course</a>
+                <a class="nav-link" href="{% url "index" %}">Course</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="templates/polls/main_faculty.html">Faculty</a>
+                <a class="nav-link" href="{% url "index_prof" %}">Faculty</a>
             </li>
         </ul>
     </div>
@@ -63,7 +63,7 @@
         <form action="{% url "search_course" %}" method="get">
             <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
                 <div class="col-auto">
-                    <select ng-model="dep" ng-init="dep=names[0]" ng-options="x for x in names"
+                    <select name="dept" ng-model="dep" ng-init="dep=names[0]" ng-options="x for x in names"
                             style="height: 38px;"></select>
                 </div>
                 <div class="col-auto">
@@ -85,7 +85,10 @@
 <script>
     var app = angular.module('myApp', []);
     app.controller('MyCtrl', function ($scope) {
-        $scope.names = ["All Departments", "ARCH", "ARTS", "ASTR", "BCBP", "BIOL", "BMED", "CHEM", "CHME", "CISH or CSCI", "CIVL", "COGS", "COMM", "CSCI", "ECON", "ECSE", "ENGR", "ENVE", "ERTH", "ESCI", "GSAS", "IENV", "IHSS", "ISCI", "ISYE", "ITWS", "LANG", "LGHT", "LITR", "MANE", "MATH", "MATP", "MTLE", "PHIL", "PHYS", "PSYC", "STSH", "STSS", "USAF", "USAR", "USNA", "WRIT"];
+        $scope.names = ["All Departments", "ARCH", "ARTS", "ASTR", "BCBP", "BIOL", "BMED", "CHEM", "CHME",
+            "CISH or CSCI", "CIVL", "COGS", "COMM", "CSCI", "ECON", "ECSE", "ENGR", "ENVE", "ERTH", "ESCI",
+            "GSAS", "IENV", "IHSS", "ISCI", "ISYE", "ITWS", "LANG", "LGHT", "LITR", "MANE", "MATH", "MATP",
+            "MTLE", "PHIL", "PHYS", "PSYC", "STSH", "STSS", "USAF", "USAR", "USNA", "WRIT"];
     });
 
 </script>
