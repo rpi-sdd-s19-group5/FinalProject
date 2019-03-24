@@ -1,4 +1,5 @@
 import json
+import sys
 from typing import Dict
 
 from selenium import webdriver
@@ -8,8 +9,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-if __name__ == "__main__":
-    # course url
+sys.path.append("/src")
+
+
+def course_info_crawler(output_json=False):
+    # initial driver
     chrome = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',
         desired_capabilities=DesiredCapabilities.CHROME)
@@ -24,6 +28,7 @@ if __name__ == "__main__":
             find_elements_by_tag_name("tr")
         index = trs.pop()
         trs = trs[1:-1]
+        count = 0
         for course_link in trs:
             # Open description
             a_tag = course_link.find_element_by_tag_name("a")
@@ -56,15 +61,30 @@ if __name__ == "__main__":
                     elif "Credit Hours" in line:
                         course["credit_hours"] = line
                 courses_info.append(course)
-                print(course)
+                print(str(course["title"]))
+
+                # Save to database
+                from info.import_data import update_course_info
+                update_course_info(course)
 
             except TimeoutException as e:
-                print("Elements not found")
+                print("Elements not found" + e.msg)
                 break
 
-    # Close drive
-    output = json.dumps(courses_info)
-    with open("course_info.json", 'w') as outfile:
-        json.dump(output, outfile, sort_keys=True, indent=4)
+    # Output data to a json file
+    if output_json:
+        output = json.dumps(courses_info)
+        with open("course_info.json", 'w') as outfile:
+            json.dump(output, outfile, sort_keys=True, indent=4)
 
+    # Close drive
     chrome.quit()
+    return courses_info
+
+
+def main():
+    course_info_crawler()
+
+
+if __name__ == "__main__":
+    main()
