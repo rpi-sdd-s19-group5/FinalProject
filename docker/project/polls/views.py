@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_http_methods
 
+from info.search_test import search_test
+from django.template import loader
 from info.models import CourseInfo
-
 
 def index(request):
     print("233")
@@ -22,7 +22,25 @@ def search_course(request):
 
 
 def test(request):
-    return None
+    course_result = search_test("materials", "arch")
+    template = loader.get_template('polls/search_course.html')
+    course_result = course_result[0:10]
+    for result in course_result:
+        temp = result['description'].split()
+        temp2 = ""
+        for x in range(0, 40):
+            temp2 += temp[x]
+            temp2 += " "
+        temp2.strip()
+        temp2 += "..."
+        result['description'] = temp2
+    context = {
+        'search_results' : course_result,
+
+    }
+    print(course_result)
+    return render(request, 'polls/search_course.html', context)
+
 
 
 def test2(request):
