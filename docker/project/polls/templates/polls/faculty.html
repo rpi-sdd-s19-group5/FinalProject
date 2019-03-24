@@ -61,45 +61,74 @@
   </div>
 </nav>
   <div class="container">
-    <a href="#"><h3 style="padding-top: 70px">Elliot Anshelevich</h3></a>
+	  {% if profinfo %}
+	     <a href="#"><h3 style="padding-top: 70px">{{profinfo.name}}</h3></a>
+          {% else %}
+              <a href="#"><h3 style="padding-top: 70px">Page missing</h3></a>
+          {% endif %}
     <div class="row" style="padding-top: 10px;">
       <div class="col-auto">
-        <h6>Professor</h6>
+          {% if profinfo %}
+	     <h6>{{profinfo.title}}</h6>
+          {% else %}
+              <h6>Title missing</h6>
+          {% endif %}
       </div>
     </div>
     <div class="row">
       <div class="col-auto">
-        <h6>Department of Computer Science</h6>
+          {% if profinfo %}
+	      <h6>{{profinfo.dept}}</h6>
+          {% else %}
+              <h6>Department missing</h6>
+          {% endif %}
       </div>
     </div>
     <div class="row">
       <div class="col-auto" style="padding-top: 20px;">
         <h6>Contact:</h6>
-        <p>anshee@rpi.edu<br><a href="http://www.cs.rpi.edu/~eanshel">http://www.cs.rpi.edu/~eanshel</a></p>
+	{% if profinfo %}
+	      <p>{{profinfo.email}}<br><a href="{{profinfo.web_page}}">{{profinfo.web_page}}</a></p>
+        {% else %}
+              <p>Email missing<br><a href="#">Web page missing</a></p>
+        {% endif %}
       </div>
     </div>
     <div class="row">
       <div class="col-auto" style="padding-top: 20px;">
         <h6>Education:</h6>
-        <p>Ph.D. Computer Science, Cornell University, 2005.<br>B.S. Computer Science, Rice University, 2000.</p>
+        {% if profinfo %}
+              <p>{{profinfo.educaiton}}</p>
+        {% else %}
+              <p>Education missing</p>
+        {% endif %}
+
       </div>
     </div>
     <div class="row">
       <div class="col-auto" style="padding-top: 20px;">
         <h6>Research Focus:</h6>
-        <p>algorithmic game theory<br>algorithms and theoretical computer science<br>agents in networks</p>
+        {% if profinfo %}
+              <p>{{profinfo.focus}}</p>
+        {% else %}
+              <p>Focus missing</p>
+        {% endif %}
+
       </div>
     </div>
     <div class="row">
       <div class="col-auto" style="padding-top: 20px;">
         <h6>Courses:</h6>
-        <p>algorithm</p>
       </div>
     </div>
     <div class="row">
       <div class="col-auto" style="padding-top: 20px;">
         <h6>Description:</h6>
-        <p>algorithm xxxxxx</p>
+        {% if profinfo %}
+           <p>{{profinfo.biography}}</p>
+        {% else %}
+            <p>Description missing</p>
+        {% endif %}
       </div>
     </div>
   </div>

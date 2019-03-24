@@ -62,23 +62,39 @@
   </div>
 </nav>
   <div class="container">
-    <a href="#"><h3 style="padding-top: 70px">ARCH 1210 - Advanced Architecture Career Discovery Program</h3></a>
+	  {% if courseinfo %}
+	  <a href="/polls/{{courseinfo.title}}/"><h3 style="padding-top: 70px">{{courseinfo.title}}</h3></a>
+	  {% else %}
+	      <a href="#"><h3 style="padding-top: 70px">Title Not avaliable</h3></a>
+	  {% endif %}
     <div class="row" style="padding-top: 10px;">
       <div class="col-auto">
         <h6>Prerequisite:</h6>
-        <p>None</p>
+          {% if courseinfo %}
+	        <p>{{courseinfo.prerequisites|slice:"13:"}}</p>
+          {% else %}
+	      <p>Prerequisites Not avaliable</p>
+          {% endif %}
       </div>
     </div>
     <div class="row">
       <div class="col-auto">
         <h6>When offered:</h6>
-        <p>Summer term annually</p>
+          {% if courseinfo %}
+	     <p>{{courseinfo.offered|slice:"13:"}}</p>
+          {% else %}
+              <p>Offer time not avaliable</p>
+          {% endif %}
       </div>
     </div>
     <div class="row">
       <div class="col-auto">
         <h6>Description:</h6>
-        <p>Similar structure as the Beginners program. The Advanced program will continue to cultivate design foundations explored in the Beginners course. Dates: TBA. 9:00 - 4:00 pm.</p>
+        {% if courseinfo %}
+             <p>{{courseinfo.description}}</p>
+        {% else %}
+              <p>Description time not avaliable</p>
+        {% endif %}
       </div>
     </div>
     <div class="row">
