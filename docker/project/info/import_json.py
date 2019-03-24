@@ -13,7 +13,7 @@ import json
 
 def json_to_dict():
     results = []
-    with open("info/19Spring.json") as json_file:
+    with open("19Spring.json") as json_file:
         data = json.load(json_file)
         for x in range(9, len(data) - 1):
             # print(data[x])
@@ -37,6 +37,7 @@ def json_to_dict():
                     entry["credit"] = last.credit
 
                 entry["prof"] = ' '.join(data[x]["Instructor"].split())
+                print(entry["prof"])
                 entry["days"] = data[x]["Days"]
                 entry["time"] = data[x]["Time"]
                 entry["date"] = data[x]["Date"]
@@ -59,6 +60,7 @@ def json_to_dict():
             date=entry["date"], days=entry["days"], time=entry["time"], location=entry["location"],
             section=entry["section"]
         )
+    return
 
 
 if __name__ == '__main__':

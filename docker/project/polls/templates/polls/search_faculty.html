@@ -117,18 +117,14 @@
     </div>
     </form>
     </div>
+    {% for prof in search_results %}
     <div class="row" style="padding-top: 10px;">
     	<div class="col-auto">
-    		<a href="#"><h5>Elliot Anshelevich</h5></a>
-        <p>Professor<br>Computer Science</p>
+    		<a href="#"><h5>{{prof.name}}</h5></a>
+        <p>{{prof.title}}<br>{{prof.dept}}</p>
     	</div>
     </div>
-    <div class="row">
-      <div class="col-auto">
-        <a href="#"><h5>Elliot Anshelevich</h5></a>
-        <p>Professor<br>Computer Science</p>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </body>
 </html>
