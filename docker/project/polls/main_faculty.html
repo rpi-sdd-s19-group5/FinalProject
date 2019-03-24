@@ -2,27 +2,13 @@
 <html>
 <head>
 <meta charset="utf-8">
-<script type="text/javascript" src="node_modules/angular/angular.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
 <style>
-  h3 {
-    color: rgb(153, 0, 0);
-  }
-
-  h6 {
-    font-weight: bold;
-  }
-
-  p {
-    color: black;
-    font-size: 14px;
-    margin-top: -7px;
-  }
-
   .redcolor {
     background-color: rgb(153, 0, 0);
   }
@@ -42,7 +28,8 @@
 </style>
 
 </head>
-<body ng-app="myApp" ng-controller="userCtrl">
+<body ng-app="myApp" ng-controller="MyCtrl">
+
 <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
   <a href="http://www.rpi.edu"><img src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png" height="40px"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,41 +37,45 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="#">Course</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="#">Faculty</a>
       </li>
     </ul>
   </div>
 </nav>
+  <img src="https://vignette.wikia.nocookie.net/sonicpokemon/images/1/1f/Magikarp_AG_anime.png/revision/latest/scale-to-width-down/250?cb=20130520060359" style="margin-top: 100px; height: 250px; margin-left: 531px;">
+
   <div class="container">
-    <a href="#"><h3 style="padding-top: 70px">ARCH 1210 - Advanced Architecture Career Discovery Program</h3></a>
-    <div class="row" style="padding-top: 10px;">
+    <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 50px;">
+    <form action="" method="get">
+      <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
       <div class="col-auto">
-        <h6>Prerequisite:</h6>
-        <p>None</p>
+        <select ng-model="dep" ng-init="dep = names[0]" ng-options="x for x in names" style="height: 38px;"></select>
+      </div>
+      <div class="col-auto">
+      <input type="text" ng-model="faculty_search" name="search_content" placeholder="Faculty" style="height: 38px; width: 400px;">
+
+      </div>
+      <div class="col-auto">
+      <button class="btn btn-danger" style="background-color: rgb(153, 0, 0); border-color: rgb(153, 0, 0);">Search</button>
       </div>
     </div>
-    <div class="row">
-      <div class="col-auto">
-        <h6>When offered:</h6>
-        <p>Summer term annually</p>
-      </div>
+    </form>
     </div>
-    <div class="row">
-      <div class="col-auto">
-        <h6>Description:</h6>
-        <p>Similar structure as the Beginners program. The Advanced program will continue to cultivate design foundations explored in the Beginners course. Dates: TBA. 9:00 - 4:00 pm.</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-auto">
-        <h6>Archived Links:</h6>
-        <p>xxx<br>xxx</p>
-      </div>
-    </div>
+    <p>{{dep}}<br>{{faculty_search}}</p>
   </div>
+
+
+<script>
+  var app = angular.module('myApp', []);
+app.controller('MyCtrl', function($scope) {
+    $scope.names = ["All Departments", "ARCH", "ARTS", "ASTR", "BCBP", "BIOL", "BMED", "CHEM", "CHME", "CISH or CSCI", "CIVL", "COGS", "COMM", "CSCI", "ECON", "ECSE", "ENGR", "ENVE", "ERTH", "ESCI", "GSAS", "IENV", "IHSS", "ISCI", "ISYE", "ITWS", "LANG", "LGHT", "LITR", "MANE", "MATH", "MATP", "MTLE", "PHIL", "PHYS", "PSYC", "STSH", "STSS", "USAF", "USAR", "USNA", "WRIT"];
+});
+
+</script>
+
 </body>
 </html>
