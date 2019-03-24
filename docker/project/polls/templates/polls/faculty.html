@@ -1,0 +1,107 @@
+<!-- http://www.runoob.com/angularjs/angularjs-bootstrap.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="node_modules/angular/angular.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<style>
+  h3 {
+    color: rgb(153, 0, 0);
+  }
+
+  h6 {
+    font-weight: bold;
+  }
+
+  p {
+    color: black;
+    font-size: 14px;
+  }
+
+  .redcolor {
+    background-color: rgb(153, 0, 0);
+  }
+  
+  #search {
+    width: 357px;
+    margin: 4px auto;
+    text-align: center;
+    display: inline-block;
+  }
+  
+  .scroll-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+  }
+</style>
+
+</head>
+<body ng-app="myApp" ng-controller="userCtrl">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
+  <a href="http://www.rpi.edu"><img src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png" height="40px"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Faculty <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Course</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+  <div class="container">
+    <a href="#"><h3 style="padding-top: 70px">Elliot Anshelevich</h3></a>
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-auto">
+        <h6>Professor</h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto">
+        <h6>Department of Computer Science</h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto" style="padding-top: 20px;">
+        <h6>Contact:</h6>
+        <p>anshee@rpi.edu<br><a href="http://www.cs.rpi.edu/~eanshel">http://www.cs.rpi.edu/~eanshel</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto" style="padding-top: 20px;">
+        <h6>Education:</h6>
+        <p>Ph.D. Computer Science, Cornell University, 2005.<br>B.S. Computer Science, Rice University, 2000.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto" style="padding-top: 20px;">
+        <h6>Research Focus:</h6>
+        <p>algorithmic game theory<br>algorithms and theoretical computer science<br>agents in networks</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto" style="padding-top: 20px;">
+        <h6>Courses:</h6>
+        <p>algorithm</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto" style="padding-top: 20px;">
+        <h6>Description:</h6>
+        <p>algorithm xxxxxx</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

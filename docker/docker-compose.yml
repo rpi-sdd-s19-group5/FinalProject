@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  dbsdd:
     image: postgres:11.1-alpine
     container_name: postgres01
     volumes:
@@ -9,8 +9,10 @@ services:
     ports:
       - "127.0.0.1:6543:5432"
     restart: always
+    networks:
+      - backend
 
-  nginx:
+  nginx_final:
     image: nginx:1.13-alpine
     container_name: nginx01
     ports:
@@ -20,27 +22,38 @@ services:
       - ./config/nginx:/etc/nginx/conf.d
     restart: always
     depends_on:
-      - djangoapp
+      - djangosdd
+    networks:
+      - backend
+
 
   selenium:
     image: selenium/standalone-chrome
     container_name: selenium01
     expose: 
       - "4444"
+    networks:
+      - backend
 
-  djangoapp:
+  djangosdd:
     build:
       context: .
       dockerfile: config/docker/django/Dockerfile
     container_name: django01
-    command: sh -c '/scripts/start_up.sh db'
+    command: sh -c '/scripts/start_up.sh dbsdd'
     depends_on:
-      - db
+      - dbsdd
       - selenium    
     volumes:
       - ./scripts:/scripts
       - ./project:/src
     expose:
         - "8080"
+    networks:
+      - backend
     restart: always
+
+networks:
+  backend:
+    driver: bridge
 
