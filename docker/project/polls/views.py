@@ -8,3 +8,8 @@ def index(request):
 
 def course(request):
     return render(request, 'polls/search_course.html')
+
+
+def test(request):
+    
+    return None
