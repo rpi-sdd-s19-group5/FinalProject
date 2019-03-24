@@ -14,6 +14,30 @@ class CourseInfo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    @staticmethod
+    def search_test(kw, dept_kw):
+        kw = kw.upper()
+        dept_kw = dept_kw.upper()
+        global result
+        # search in all departments
+        if dept_kw == "ALL":
+            print("searching in all depts")
+            result1 = CourseInfo.objects.filter(course_code__iexact=kw).order_by('title')
+            result2 = CourseInfo.objects.filter(title__icontains=kw).order_by('title')
+            result3 = CourseInfo.objects.filter(description__icontains=kw).order_by('title')
+            result = result1 | result2 | result3
+            result.distinct()
+        else:
+            result1 = CourseInfo.objects.filter(dept=dept_kw).filter(course_code__iexact=kw).order_by('title')
+            result2 = CourseInfo.objects.filter(dept=dept_kw).filter(title__icontains=kw).order_by('title')
+            result3 = CourseInfo.objects.filter(dept=dept_kw).filter(description__icontains=kw).order_by('title')
+            result = result1 | result2 | result3
+            result.distinct()
+
+        result = result.order_by('title')
+        result_2 = list(result.values())
+        return result_2
+
 
 class ProfInfo(models.Model):
     url = models.URLField(blank=True, null=True, max_length=255)
@@ -30,6 +54,13 @@ class ProfInfo(models.Model):
     # Update time
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    @staticmethod
+    def search_test_prof(kw):
+        kw = kw.upper()
+        result_1 = ProfInfo.objects.filter(name__icontains=kw).order_by('name')
+        result_2 = list(result_1.values())
+        return result_2
 
 
 class ProfAndCourses(models.Model):
@@ -50,3 +81,17 @@ class ProfAndCourses(models.Model):
 
     class Meta:
         get_latest_by = ['updated_at']
+
+    @staticmethod
+    def search_test(kw):
+        result = ProfAndCourses.objects.filter(prof__icontains=kw)
+        result_2 = list(result.values("course_code"))
+        # print(result_2)
+        result_3 = []
+        for x in result_2:
+            if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
+                result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
+        # result_3 = list(result_3.values())
+        for x in result_3:
+            print(x['title'])
+        return result_3
