@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from info.search_test import search_test
+from info.search_test import search_test_prof
 from django.template import loader
 from info.models import CourseInfo
 
@@ -63,3 +64,13 @@ def course_detail(request):
 
 def search_prof(request):
     return None
+
+
+def test_prof_result(request):
+    prof_result = search_test_prof("Jeff")
+    template = loader.get_template('polls/search_faculty.html')
+    prof_result = prof_result[0:10]
+    context = {
+        'search_results': prof_result,
+    }
+    return render(request, 'polls/search_faculty.html', context)
