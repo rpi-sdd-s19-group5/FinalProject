@@ -5,8 +5,8 @@ from info.search_test import search_test
 from django.template import loader
 from info.models import CourseInfo
 
+
 def index(request):
-    print("233")
     return render(request, 'polls/main.html')
 
 
@@ -15,32 +15,42 @@ def search_course(request):
         print(request.GET)
         dept = request.GET["dept"]
         search_content = request.GET["search_content"]
-        return render(request, 'polls/search_course.html')
+        print(dept)
+        print(search_content)
+        course_result = search_test(search_content, dept)[:10]
+        context = {
+            'search_results': course_result,
+            'dept': dept,
+            'search_content': search_content,
+        }
+
     else:
-        data = CourseInfo.objects.all()[:5]
-        return render(request, 'polls/search_course.html')
+        course_result = CourseInfo.objects.all()[:10]
+        context = {
+            'search_results': course_result,
+        }
 
-
-def test(request):
-    course_result = search_test("materials", "arch")
-    template = loader.get_template('polls/search_course.html')
-    course_result = course_result[0:10]
-    for result in course_result:
-        temp = result['description'].split()
-        temp2 = ""
-        for x in range(0, 40):
-            temp2 += temp[x]
-            temp2 += " "
-        temp2.strip()
-        temp2 += "..."
-        result['description'] = temp2
-    context = {
-        'search_results' : course_result,
-
-    }
     print(course_result)
     return render(request, 'polls/search_course.html', context)
 
+
+# def test(request):
+#     course_result = search_test("materials", "arch")
+#     course_result = course_result[0:10]
+#     for result in course_result:
+#         temp = result['description'].split()
+#         temp2 = ""
+#         for x in range(0, 40):
+#             temp2 += temp[x]
+#             temp2 += " "
+#         temp2.strip()
+#         temp2 += "..."
+#         result['description'] = temp2
+#     context = {
+#         'search_results': course_result,
+#     }
+#     print(course_result)
+#     return render(request, 'polls/search_course.html', context)
 
 
 def test2(request):
@@ -48,4 +58,8 @@ def test2(request):
 
 
 def course_detail(request):
+    return None
+
+
+def search_prof(request):
     return None

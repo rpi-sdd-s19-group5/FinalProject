@@ -63,11 +63,10 @@
 <div class="container">
     <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 50px;">
         <form action="{% url "search_course" %}" method="get">
-            {% csrf_token %}
             <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
                 <div class="col-auto">
                     <select class="custom-select" id="courseprefix" name="dept" title="Choose a Course Prefix">
-                        <option value="-1">Departments</option>
+                        <option value="ALL">Departments</option>
                         <option value="ARCH">ARCH</option>
                         <option value="ARTS">ARTS</option>
                         <option value="ASTR">ASTR</option>

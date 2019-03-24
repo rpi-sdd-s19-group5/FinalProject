@@ -10,7 +10,7 @@ if 'setup' in dir(django): django.setup()
 
 from info.models import CourseInfo
 
-def search_test(kw, dept_kw):
+def search_test(kw: object, dept_kw: object) -> object:
     #c = CourseInfo()
     #print("hello world")
     #kw = input("keyword: ")
@@ -37,8 +37,8 @@ def search_test(kw, dept_kw):
     result = result.order_by('title')
     #elif sort_option == "courseid":
     #    result = result.order_by('course_code')
-    for x in range(0, len(result)):
-        print(result[x].title)
+    # for x in range(0, len(result)):
+    #     print(result[x].title)
     result_2 = list(result.values())
     #print(result_2)
     return result_2
