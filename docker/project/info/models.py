@@ -81,3 +81,17 @@ class ProfAndCourses(models.Model):
 
     class Meta:
         get_latest_by = ['updated_at']
+
+    @staticmethod
+    def search_test(kw):
+        result = ProfAndCourses.objects.filter(prof__icontains=kw)
+        result_2 = list(result.values("course_code"))
+        # print(result_2)
+        result_3 = []
+        for x in result_2:
+            if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
+                result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
+        # result_3 = list(result_3.values())
+        for x in result_3:
+            print(x['title'])
+        return result_3
