@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Prof info
     path('search_prof', views.search_prof, name="search_prof"),
-    path('prof/<name_num>', views.prof_detail, name="search_prof"),
+    path('prof/<name>/<db_id>', views.prof_detail, name="prof_detail"),
 
     # path('test', views.test, name="test"),
 ]

@@ -1,105 +1,162 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<script type="text/javascript" src="node_modules/angular/angular.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
 
-<style>
-  h3 {
-    color: rgb(153, 0, 0);
-  }
+    <style>
+        h3 {
+            color: rgb(153, 0, 0);
+        }
 
-  h6 {
-    font-weight: bold;
-  }
+        h6 {
+            font-weight: bold;
+        }
 
-  p {
-    color: black;
-    font-size: 14px;
-  }
+        p {
+            color: black;
+            font-size: 14px;
+        }
 
-  .redcolor {
-    background-color: rgb(153, 0, 0);
-  }
-  
-  #search {
-    width: 357px;
-    margin: 4px auto;
-    text-align: center;
-    display: inline-block;
-  }
-  
-  .scroll-menu {
-    height: auto;
-    max-height: 200px;
-    overflow-x: hidden;
-  }
-</style>
+        .redcolor {
+            background-color: rgb(153, 0, 0);
+        }
+
+        #search {
+            width: 357px;
+            margin: 4px auto;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .scroll-menu {
+            height: auto;
+            max-height: 200px;
+            overflow-x: hidden;
+        }
+    </style>
+    <title>{{ prof_info.name }}</title>
 
 </head>
 <body ng-app="myApp" ng-controller="userCtrl">
 <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
-  <a href="./main.html"><img src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png" height="40px"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="./main.html">Course</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="./main_faculty.html">Faculty</a>
-      </li>
-    </ul>
-  </div>
+    <a href="./main.html"><img
+            src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png" height="40px"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "index" %}">Course</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url "index_prof" %}">Faculty</a>
+            </li>
+        </ul>
+    </div>
 </nav>
-  <div class="container">
-    <a href="#"><h3 style="padding-top: 70px">Elliot Anshelevich</h3></a>
+
+<div class="container">
+    {% if prof_info %}
+        <a href="{{ prof_info.url }}"><h3 style="padding-top: 70px">{{ prof_info.name }}</h3></a>
+    {% else %}
+        <a href="#"><h3 style="padding-top: 70px">Page missing</h3></a>
+    {% endif %}
     <div class="row" style="padding-top: 10px;">
-      <div class="col-auto">
-        <h6>Professor</h6>
-      </div>
+        <div class="col-auto">
+            {% if prof_info.title %}
+                <h6>{{ prof_info.title }}</h6>
+            {% else %}
+                <h6>Title missing</h6>
+            {% endif %}
+        </div>
     </div>
     <div class="row">
-      <div class="col-auto">
-        <h6>Department of Computer Science</h6>
-      </div>
+        <div class="col-auto">
+            {% if prof_info.dept %}
+                <h6>{{ prof_info.dept }}</h6>
+            {% else %}
+                <h6>Department missing</h6>
+            {% endif %}
+        </div>
+    </div>
+    <img src="{{ prof_info.image }}" style="max-width: 200px;max-height: 200px">
+    <div class="row">
+        <div class="col-auto" style="padding-top: 20px;">
+            <h6>Contact:</h6>
+            {% if prof_info.email %}
+                <p>{{ prof_info.email }}<br><a href="{{ prof_info.web_page }}">{{ prof_info.web_page }}</a></p>
+            {% else %}
+                <p>Email info missing<br><a href="#">Web page info missing</a></p>
+            {% endif %}
+        </div>
     </div>
     <div class="row">
-      <div class="col-auto" style="padding-top: 20px;">
-        <h6>Contact:</h6>
-        <p>anshee@rpi.edu<br><a href="http://www.cs.rpi.edu/~eanshel">http://www.cs.rpi.edu/~eanshel</a></p>
-      </div>
+        <div class="col-auto" style="padding-top: 20px;">
+            <h6>Education:</h6>
+            <p>{{ prof_info.educaiton }}</p>
+            {% if prof_info.education %}
+                <p>{{ prof_info.education }}</p>
+            {% else %}
+                <p>Education info missing</p>
+            {% endif %}
+
+        </div>
     </div>
     <div class="row">
-      <div class="col-auto" style="padding-top: 20px;">
-        <h6>Education:</h6>
-        <p>Ph.D. Computer Science, Cornell University, 2005.<br>B.S. Computer Science, Rice University, 2000.</p>
-      </div>
+        <div class="col-auto" style="padding-top: 20px;">
+            <h6>Research Focus:</h6>
+            {% if prof_info.focus %}
+                <p>{{ prof_info.focus }}</p>
+            {% else %}
+                <p>Focus missing</p>
+            {% endif %}
+
+        </div>
     </div>
     <div class="row">
-      <div class="col-auto" style="padding-top: 20px;">
-        <h6>Research Focus:</h6>
-        <p>algorithmic game theory<br>algorithms and theoretical computer science<br>agents in networks</p>
-      </div>
+        <div class="col-auto" style="padding-top: 20px;">
+            <h6>Courses:</h6>
+            {% if prof_course.count == 0 %}
+                {% for course in prof_course %}
+                    <div class="col-auto">
+                        <a href="{% url "course_detail" name_num=course.course_code %}">
+                            <h5>{{ course.course_code }} {{ course.title }}</h5></a>
+                        <p style="overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp:3;
+                -webkit-box-orient: vertical;">{{ course.description }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                None
+            {% endif %}
+        </div>
     </div>
     <div class="row">
-      <div class="col-auto" style="padding-top: 20px;">
-        <h6>Courses:</h6>
-        <p>algorithm</p>
-      </div>
+        <div class="col-auto" style="padding-top: 20px;">
+            <h6>Description:</h6>
+            {% if prof_info.biography and  prof_info.strip %}
+                <p>{{ prof_info.biography }}</p>
+            {% else %}
+                <p>Description missing</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="row">
-      <div class="col-auto" style="padding-top: 20px;">
-        <h6>Description:</h6>
-        <p>algorithm xxxxxx</p>
-      </div>
-    </div>
-  </div>
+</div>
 </body>
 </html>

@@ -84,8 +84,8 @@ class ProfAndCourses(models.Model):
 
     @staticmethod
     def search_test(kw):
-        result = ProfAndCourses.objects.filter(prof__icontains=kw)
-        result_2 = list(result.values("course_code"))
+        result_1 = ProfAndCourses.objects.filter(prof__icontains=kw)
+        result_2 = list(result_1.values("course_code"))
         # print(result_2)
         result_3 = []
         for x in result_2:

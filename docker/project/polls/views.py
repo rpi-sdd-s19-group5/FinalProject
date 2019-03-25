@@ -1,12 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404
 from django.shortcuts import render
 
+from info.models import CourseInfo, ProfAndCourses
+from info.models import ProfInfo
 from info.search_test import search_test
-from info.search_test import search_test_prof
-from django.template import loader
-from info.models import CourseInfo, ProfInfo
-
-from info.models import CourseInfo
 
 
 def index(request):
@@ -17,6 +14,7 @@ def index_prof(request):
     return render(request, 'polls/main_faculty.html')
 
 
+# List the search results from required parameter
 def search_course(request):
     if request.GET:
         print(request.GET)
@@ -41,14 +39,17 @@ def search_course(request):
     return render(request, 'polls/search_course.html', context)
 
 
+# List the detail information of course
 def course_detail(request, name_num):
     course = CourseInfo.objects.filter(course_code=name_num)
     if len(course) == 1:
-        return render(request, 'polls/search_course.html')
+        context = {'course_info': course[0]}
+        return render(request, 'polls/course.html', context)
     else:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return Http404('Course not found')
 
 
+# List all related professors
 def search_prof(request):
     if request.GET:
         print(request.GET)
@@ -70,5 +71,14 @@ def search_prof(request):
     return render(request, 'polls/search_faculty.html', context)
 
 
-def prof_detail(request):
-    return None
+# Get professor home page
+def prof_detail(request, name, db_id):
+    result = ProfInfo.objects.filter(id=db_id)
+    if len(result) == 1:
+        prof = result[0]
+    else:
+        return Http404('Prof not found')
+    courses = ProfAndCourses.search_test(name)
+    context = {'prof_info': prof, 'prof_course': courses}
+    prof.education
+    return render(request, 'polls/faculty.html', context)
