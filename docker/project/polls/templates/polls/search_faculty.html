@@ -43,6 +43,7 @@
             overflow-x: hidden;
         }
     </style>
+    <title>RPI Advanced Academic Catalog - Prof<</title>
 
 </head>
 <body ng-app="myApp" ng-controller="MyCtrl">
@@ -55,10 +56,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="./main.html">Course</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="./main_faculty.html">Faculty</a>
             </li>
         </ul>
@@ -66,7 +67,7 @@
 </nav>
 <div class="container">
     <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 100px;">
-        <form action="{% url "search_prof" %}" method="get">
+        <form action="{% url 'search_prof' %}" method="get">
             <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
                 <div class="col-auto">
                     <select ng-model="dep" name="dept" ng-init="dep = names[0]" ng-options="x for x in names"
@@ -89,7 +90,7 @@
     {% for prof in search_results %}
         <div class="row" style="padding-top: 10px;">
             <div class="col-auto">
-                <a href="#"><h5>{{ prof.name }}</h5></a>
+                <a href="{% url "prof_detail" name=prof.name db_id=prof.id %}"><h5>{{ prof.name }}</h5></a>
                 <p>{{ prof.title }}<br>{{ prof.dept }}</p>
             </div>
         </div>
