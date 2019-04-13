@@ -1,0 +1,70 @@
+{% extends 'polls/base.html' %}
+{% block title %}{{ course_info.title }}{% endblock %}
+{% block content %}
+    <body ng-app="myApp" ng-controller="userCtrl">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
+        <a href="{% url "index" %}"><img
+                src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png"
+                height="40px" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url "index" %}">Course</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "index_prof" %}">Faculty</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        {% if course_info %}
+            <a href="#"><h3 style="padding-top: 70px" class="red">{{ course_info.title }}</h3></a>
+        {% else %}
+            <a href="#"><h3 style="padding-top: 70px" class="red">Title Not available</h3></a>
+        {% endif %}
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-auto">
+                <h6 class="fontType">Prerequisite:</h6>
+                {% if course_info %}
+                    <p class="display">{{ course_info.prerequisites|slice:"13:" }}</p>
+                {% else %}
+                    <p class="display">Prerequisites Not available</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <h6 class="fontType">When offered:</h6>
+                {% if course_info %}
+                    <p class="display">{{ course_info.offered|slice:"13:" }}</p>
+                {% else %}
+                    <p class="display">Offer time not available</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <h6 class="fontType">Description:</h6>
+                {% if course_info %}
+                    <p class="display">{{ course_info.description }}</p>
+                {% else %}
+                    <p class="display">Description time not available</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <h6 class="fontType">Related Links:</h6>
+                {% for related_link in related_links %}
+                    <p class="display"><a href="{{ related_link.links }}">{{ related_link.title }}</a></p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </body>
+{% endblock %}

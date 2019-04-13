@@ -1,0 +1,60 @@
+{% extends 'polls/base.html' %}
+{% block title %}RPI Advanced Academic Catalog - Prof{% endblock %}
+{% block content %}
+    <body ng-app="myApp" ng-controller="MyCtrl">
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
+        <a href="./main.html"><img
+                src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png"
+                height="40px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./main.html">Course</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="./main_faculty.html">Faculty</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <img src="https://vignette.wikia.nocookie.net/sonicpokemon/images/1/1f/Magikarp_AG_anime.png/revision/latest/scale-to-width-down/250?cb=20130520060359"
+         style="margin-top: 100px; height: 250px; margin-left: 531px;">
+
+    <div class="container">
+        <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 50px;">
+            <form action="{% url "search_prof" %}" method="get">
+                <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
+                    <div class="col-auto">
+                        <select ng-model="dep" name="dept" ng-init="dep = names[0]" ng-options="x for x in names"
+                                style="height: 38px;"></select>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" ng-model="faculty_search" name="search_content" placeholder="Faculty"
+                               style="height: 38px; width: 400px;">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-danger"
+                                style="background-color: rgb(153, 0, 0); border-color: rgb(153, 0, 0);">Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('MyCtrl', function ($scope) {
+            $scope.names = ["All Departments", "ARCH", "ARTS", "ASTR", "BCBP", "BIOL", "BMED", "CHEM", "CHME", "CISH or CSCI", "CIVL", "COGS", "COMM", "CSCI", "ECON", "ECSE", "ENGR", "ENVE", "ERTH", "ESCI", "GSAS", "IENV", "IHSS", "ISCI", "ISYE", "ITWS", "LANG", "LGHT", "LITR", "MANE", "MATH", "MATP", "MTLE", "PHIL", "PHYS", "PSYC", "STSH", "STSS", "USAF", "USAR", "USNA", "WRIT"];
+        });
+
+    </script>
+
+    </body>
+{% endblock %}>

@@ -1,0 +1,67 @@
+{% extends 'polls/base.html' %}
+{% block title %}RPI Advanced Academic Catalog - Prof{% endblock %}
+{% block content %}
+    <body ng-app="myApp" ng-controller="MyCtrl">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
+        <a href="{% url "index" %}"><img
+                src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png"
+                height="40px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./main.html">Course</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="./main_faculty.html">Faculty</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 100px;">
+            <form action="{% url 'search_prof' %}" method="get">
+                <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
+                    <div class="col-auto">
+                        <select ng-model="dep" name="dept" ng-init="dep = names[0]" ng-options="x for x in names"
+                                style="height: 38px;"></select>
+                    </div>
+                    <div class="col-auto">
+                        <label>
+                            <input type="text" name="search_content" value="{{ search_content }}" placeholder="Faculty"
+                                   style="height: 38px; width: 400px;">
+                        </label>
+
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-danger"
+                                style="background-color: rgb(153, 0, 0); border-color: rgb(153, 0, 0);">Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% for prof in search_results %}
+            <div class="row" style="padding-top: 10px;">
+                <div class="col-auto">
+                    <a href="{% url "prof_detail" name=prof.name db_id=prof.id %}">
+                        <h5 style="color: rgb(153, 0, 0);">{{ prof.name }}</h5></a>
+                    <p style="color: black;font-size: 16px;margin-top: -7px;">{{ prof.title }}<br>{{ prof.dept }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('MyCtrl', function ($scope) {
+            $scope.names = ["All Departments", "ARCH", "ARTS", "ASTR", "BCBP", "BIOL", "BMED", "CHEM", "CHME", "CISH or CSCI", "CIVL", "COGS", "COMM", "CSCI", "ECON", "ECSE", "ENGR", "ENVE", "ERTH", "ESCI", "GSAS", "IENV", "IHSS", "ISCI", "ISYE", "ITWS", "LANG", "LGHT", "LITR", "MANE", "MATH", "MATP", "MTLE", "PHIL", "PHYS", "PSYC", "STSH", "STSS", "USAF", "USAR", "USNA", "WRIT"];
+        });
+
+    </script>
+    </body>
+{% endblock %}>

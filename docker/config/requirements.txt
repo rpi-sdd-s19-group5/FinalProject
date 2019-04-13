@@ -3,4 +3,5 @@ gunicorn
 psycopg2
 selenium
 Scrapy
-
+fuzzyfinder
+gsearch
