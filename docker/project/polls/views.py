@@ -21,8 +21,6 @@ def search_course(request):
         dept = request.GET["dept"].split(":")[1]
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
-        print(dept)
-        print(search_content)
         course_result = search_test(search_content, dept)[:10]
         context = {
             'search_results': course_result,
@@ -80,5 +78,4 @@ def prof_detail(request, name, db_id):
         return Http404('Prof not found')
     courses = ProfAndCourses.search_test(name)
     context = {'prof_info': prof, 'prof_course': courses}
-    prof.education
     return render(request, 'polls/faculty.html', context)
