@@ -64,7 +64,7 @@ def course_info_crawler(output_json=False):
                 print(str(course["title"]))
 
                 # Save to database
-                from info.import_data import update_course_info
+                from info.scripts.import_data import update_course_info
                 update_course_info(course)
 
             except TimeoutException as e:
