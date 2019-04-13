@@ -1,6 +1,6 @@
 from django.test import TestCase
+
 from info.models import CourseInfo, ProfInfo
-from info.search_test import search_course_tool
 
 
 class SimpleTestCase(TestCase):
@@ -8,11 +8,13 @@ class SimpleTestCase(TestCase):
     def test_CourseSearchInDept(self):
         CourseInfo.objects.all().delete()
         CourseInfo.objects.update_or_create(
-            title="Test Course 1", dept="TEST", course_code="TEST 0001", description="This is a test abracadabra", prerequisites="N/A",
+            title="Test Course 1", dept="TEST", course_code="TEST 0001", description="This is a test abracadabra",
+            prerequisites="N/A",
             offered="Never", cross_listed="Delete me", credit_hours=0
         )
         CourseInfo.objects.update_or_create(
-            title="Test Course 2", dept="FFFF", course_code="FFFF 0001", description="This is another test abracadabra jakads",
+            title="Test Course 2", dept="FFFF", course_code="FFFF 0001",
+            description="This is another test abracadabra jakads",
             prerequisites="N/A",
             offered="Never", cross_listed="Delete me", credit_hours=0
         )
@@ -24,7 +26,7 @@ class SimpleTestCase(TestCase):
         self.assertEqual(len(search_result), 1)
         CourseInfo.objects.filter(cross_listed="Delete me").delete()
 
-    #this test case tests searching in all departments with a keyword
+    # This test case tests searching in all departments with a keyword
     def test_CourseSearchAllDept(self):
         CourseInfo.objects.all().delete()
         CourseInfo.objects.update_or_create(
@@ -109,12 +111,14 @@ class SimpleTestCase(TestCase):
             offered="Never", cross_listed="Delete me", credit_hours=0
         )
         CourseInfo.objects.update_or_create(
-            title="Test Course 2", dept="AAAA", course_code="AAAA 0001", description="This is a test abracadabra jakads",
+            title="Test Course 2", dept="AAAA", course_code="AAAA 0001",
+            description="This is a test abracadabra jakads",
             prerequisites="N/A",
             offered="Never", cross_listed="Delete me", credit_hours=0
         )
         CourseInfo.objects.update_or_create(
-            title="Test Course 3", dept="BBBB", course_code="BBBB 0001", description="This is a test abracadabra jakads",
+            title="Test Course 3", dept="BBBB", course_code="BBBB 0001",
+            description="This is a test abracadabra jakads",
             prerequisites="N/A",
             offered="Never", cross_listed="Delete me", credit_hours=0
         )
@@ -162,7 +166,8 @@ class SimpleTestCase(TestCase):
     def test_SearchProf(self):
         ProfInfo.objects.all().delete()
         ProfInfo.objects.update_or_create(
-            url="http://this.url", name="John Doe", title="Prof", dept="TEST", email="jd@jd.com", web_page="jd.com", focus="N/A",
+            url="http://this.url", name="John Doe", title="Prof", dept="TEST", email="jd@jd.com", web_page="jd.com",
+            focus="N/A",
             education="kindergarten",
             biography="N/A", image="N/A"
         )
@@ -212,5 +217,3 @@ class SimpleTestCase(TestCase):
         self.assertEqual(len(search_result), 3)
         ProfInfo.objects.all().delete()
 
-
-# Create your tests here.
