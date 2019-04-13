@@ -1,5 +1,6 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 
 from info.models import CourseInfo, ProfAndCourses
 from info.models import ProfInfo
@@ -16,23 +17,35 @@ def index_prof(request):
 
 # List the search results from required parameter
 def search_course(request):
-    if request.GET:
+    if request.GET and "search_content" in request.GET:
         print(request.GET)
         dept = request.GET["dept"].split(":")[1]
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
-        course_result = search_test(search_content, dept)[:10]
+        course_result = search_test(search_content, dept)
         context = {
             'search_results': course_result,
             'dept': dept,
             'search_content': search_content,
         }
     else:
-        course_result = CourseInfo.objects.all()[:10]
+        course_result = CourseInfo.objects.all()
         context = {
             'search_results': course_result,
+            'dept': 'All Departments',
         }
-
+    paginator = Paginator(course_result, 10)
+    if request.method == "GET":
+        page = request.GET.get('page', 1)
+        try:
+            courses = paginator.page(page)
+        except PageNotAnInteger:
+            courses = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('Cannot find anything')
+        except EmptyPage:
+            courses = paginator.page(paginator.num_pages)
+    context['search_results'] = courses
     print(course_result)
     return render(request, 'polls/search_course.html', context)
 

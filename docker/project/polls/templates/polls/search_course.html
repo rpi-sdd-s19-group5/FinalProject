@@ -56,6 +56,44 @@
             </div>
         </div>
     {% endfor %}
+    <div id="pages">
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                <li class="page-item"><a class='active page-link' href="?page=1{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">First</a></li>
+                {% if search_results.has_previous %}
+                    <a class='active page-link' href="?page={{ search_results.previous_page_number }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">Previous</a>
+                {% endif %}
+                {% if search_results.number|add:-2 > 0 %}
+                <li class="page-item"><a class='active page-link' href="?page={{ search_results.number|add:-2 }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ search_results.number|add:-2 }}</a></li>
+                <li class="page-item"><a class='active page-link' href="?page={{ search_results.number|add:-1 }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ search_results.number|add:-1 }}</a></li>
+                {% elif search_results.number|add:-1 > 0 %}
+                <li class="page-item"><a class='active page-link' href="?page={{ search_results.number|add:-1 }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ search_results.number|add:-1 }}</a></li>
+                {% endif %}
+                <li class="active page-item"><a class="page-link">{{ search_results.number }} <span class="sr-only">(current)</span></a></li>
+                {% if search_results.number|add:2 <= search_results.paginator.num_pages %}
+                <li class="page-item"><a class='active page-link' href="?page={{ search_results.number|add:1 }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ search_results.number|add:1 }}</a></li>
+                <li class="page-item"><a class='active page-link' href="?page={{ search_results.number|add:2 }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ search_results.number|add:2 }}</a></li>
+                {% elif search_results.number|add:1 <= search_results.paginator.num_pages %}
+                <li class="page-item"><a class='active page-link' href="?page={{ search_results.number|add:1 }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ search_results.number|add:1 }}</a></li>
+                {% endif %}
+                <!--{% for i in search_results.paginator.page_range %}
+                    {% if search_results.number == i %}
+                    <li class="active page-item"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}-->
+                <!--<span class="current">
+                    Page {{ search_results.number }} of {{ search_results.paginator.num_pages }}</span>-->
+                {% if search_results.has_next %}
+                    <a class='active page-link' href="?page={{ search_results.next_page_number }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">Next</a>
+                {% endif %}
+                <a class='active page-link' href="?page={{ search_results.paginator.num_pages }}{% if request.GET.dept %}&dept={{request.GET.dept}}{% endif %}{% if request.GET.search_content %}&search_content={{request.GET.search_content}}{% endif %}">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 
 <script>
