@@ -12,6 +12,7 @@ urlpatterns = [
 
     # Course info
     path('search_course', views.search_course, name="search_course"),
+    path('search_course2', views.search_course2, name="search_course2"),
     path('course/<name_num>', views.course_detail, name="course_detail"),
 
     # Prof info

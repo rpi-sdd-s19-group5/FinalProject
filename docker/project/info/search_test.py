@@ -11,28 +11,31 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
 if 'setup' in dir(django): django.setup()
 
 
-def search_test(kw, dept_kw):
+def search_course_tool(kw, dept_kw, sort_option=1):
     kw = kw.upper()
     dept_kw = dept_kw.upper()
     global result
     # search in all departments
     if dept_kw == "ALL":
+        print(sort_option)
         print("searching in all depts")
-        result1 = CourseInfo.objects.filter(course_code__iexact=kw).order_by('title')
-        result2 = CourseInfo.objects.filter(title__icontains=kw).order_by('title')
-        result3 = CourseInfo.objects.filter(description__icontains=kw).order_by('title')
+        result1 = CourseInfo.objects.filter(course_code__iexact=kw)
+        result2 = CourseInfo.objects.filter(title__icontains=kw)
+        result3 = CourseInfo.objects.filter(description__icontains=kw)
         result = result1 | result2 | result3
         result.distinct()
     else:
-        result1 = CourseInfo.objects.filter(dept=dept_kw).filter(course_code__iexact=kw).order_by('title')
-        result2 = CourseInfo.objects.filter(dept=dept_kw).filter(title__icontains=kw).order_by('title')
-        result3 = CourseInfo.objects.filter(dept=dept_kw).filter(description__icontains=kw).order_by('title')
+        result1 = CourseInfo.objects.filter(dept=dept_kw).filter(course_code__iexact=kw)
+        result2 = CourseInfo.objects.filter(dept=dept_kw).filter(title__icontains=kw)
+        result3 = CourseInfo.objects.filter(dept=dept_kw).filter(description__icontains=kw)
         result = result1 | result2 | result3
         result.distinct()
-    # if sort_option == "title":
-    result = result.order_by('title')
-    # elif sort_option == "courseid":
-    #    result = result.order_by('course_code')
+    if sort_option == "1":
+        print("order1")
+        result = result.order_by('title')
+    elif sort_option == "2":
+        print("order")
+        result = result.order_by('course_code')
     # for x in range(0, len(result)):
     #     print(result[x].title)
     result_2 = list(result.values())
@@ -40,7 +43,7 @@ def search_test(kw, dept_kw):
     return result_2
 
 
-def search_test_prof(kw):
+def search_prof(kw):
     kw = kw.upper()
     result_1 = ProfInfo.objects.filter(name__icontains=kw).order_by('name')
     result_2 = list(result_1.values())
@@ -48,4 +51,4 @@ def search_test_prof(kw):
 
 
 if __name__ == '__main__':
-    search_test("materials", "arch")
+    search_course_tool("materials", "arch")

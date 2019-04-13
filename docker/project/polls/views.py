@@ -4,7 +4,7 @@ from django.shortcuts import render
 from info.models import CourseInfo, ProfAndCourses
 from info.models import ProfInfo
 from info.scripts.util_functions import search_related_links
-from info.search_test import search_test
+from info.search_test import search_course_tool
 
 
 def index(request):
@@ -16,13 +16,42 @@ def index_prof(request):
 
 
 # List the search results from required parameter
-def search_course(request):
+def search_course2(request):
     if request.GET:
         print(request.GET)
         dept = request.GET["dept"].split(":")[1]
+        # 1 = alphabetical; 2 = course code; 3 = relevance
+        sort_option = request.GET["sort"]
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
-        course_result = search_test(search_content, dept)[:10]
+        course_result2 = CourseInfo.search_course_tool(search_content, dept, sort_option)[:10]
+
+        context = {
+            'search_results': course_result2,
+            'dept': dept,
+            'search_content': search_content,
+            'sort_value': sort_option,
+        }
+    else:
+        course_result2 = CourseInfo.objects.all()[:10]
+        context = {
+            'search_results': course_result2,
+        }
+
+    # print(course_result2)
+    return render(request, 'polls/search_course.html', context)
+
+
+def search_course(request):
+    if request.GET:
+        # print(request.GET)
+        dept = request.GET["dept"].split(":")[1]
+        # 1 = alphabetical; 2 = course code; 3 = relevance
+        # sort_option = request.GET["sort"]
+        dept = ("ALL" if dept == "All Departments" else dept)
+        search_content = request.GET["search_content"]
+        course_result = CourseInfo.search_course_tool(search_content, dept, 2)[:10]
+        # course_result = []
         context = {
             'search_results': course_result,
             'dept': dept,
@@ -34,7 +63,7 @@ def search_course(request):
             'search_results': course_result,
         }
 
-    print(course_result)
+    # print(course_result)
     return render(request, 'polls/search_course.html', context)
 
 
@@ -56,7 +85,8 @@ def search_prof(request):
         print(request.GET)
         search_content = request.GET["search_content"]
         print(search_content)
-        prof_result = ProfInfo.search_test_prof(search_content)[:10]
+        prof_result = ProfInfo.search_prof_tool(search_content)[:10]
+
         for prof in prof_result: prof["dept"] = prof["dept"].replace('|', ' ')
         context = {
             'search_results': prof_result,
