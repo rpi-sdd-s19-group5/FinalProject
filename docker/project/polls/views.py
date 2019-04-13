@@ -16,42 +16,18 @@ def index_prof(request):
 
 
 # List the search results from required parameter
-def search_course2(request):
-    if request.GET and "search_content" in request.GET:
-        print(request.GET)
-        dept = request.GET["dept"].split(":")[1]
-        # 1 = alphabetical; 2 = course code; 3 = relevance
-        sort_option = request.GET["sort"]
-        dept = ("ALL" if dept == "All Departments" else dept)
-        search_content = request.GET["search_content"]
-        course_result2 = CourseInfo.search_course_tool(search_content, dept, sort_option)[:10]
-
-        context = {
-            'search_results': course_result2,
-            'dept': dept,
-            'search_content': search_content,
-            'sort_value': sort_option,
-        }
-    else:
-        course_result2 = CourseInfo.objects.all()[:10]
-        context = {
-            'search_results': course_result2,
-        }
-
-    # print(course_result2)
-    return render(request, 'polls/search_course.html', context)
-
-
 def search_course(request):
     if request.GET and "search_content" in request.GET:
         # print(request.GET)
         dept = request.GET["dept"].split(":")[1]
         # 1 = alphabetical; 2 = course code; 3 = relevance
-        # sort_option = request.GET["sort"]
+        if "sort" in request.GET:
+            sort_option = request.GET["sort"]
+        else:
+            sort_option = 1
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
-        course_result = CourseInfo.search_course_tool(search_content, dept, 2)[:10]
-        # course_result = []
+        course_result = CourseInfo.search_course_tool(search_content, dept, sort_option)
         context = {
             'search_results': course_result,
             'dept': dept,
@@ -62,18 +38,18 @@ def search_course(request):
         context = {
             'search_results': course_result,
             'dept': 'All Departments',
+            'search_content': "",
         }
     paginator = Paginator(course_result, 10)
-    if request.method == "GET":
-        page = request.GET.get('page', 1)
-        try:
-            courses = paginator.page(page)
-        except PageNotAnInteger:
-            courses = paginator.page(1)
-        except InvalidPage:
-            return HttpResponse('Cannot find anything')
-        except EmptyPage:
-            courses = paginator.page(paginator.num_pages)
+    page = request.GET.get('page', 1)
+    try:
+        courses = paginator.page(page)
+    except PageNotAnInteger:
+        courses = paginator.page(1)
+    except EmptyPage:
+        courses = paginator.page(paginator.num_pages)
+    except InvalidPage:
+        return HttpResponse('Cannot find anything')
     context['search_results'] = courses
     print(course_result)
 
