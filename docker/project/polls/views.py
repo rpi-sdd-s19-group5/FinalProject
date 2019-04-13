@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from info.models import CourseInfo, ProfAndCourses
 from info.models import ProfInfo
-from info.search_test import search_course_tool
+from info.scripts.util_functions import search_related_links
 
 
 def index(request):
@@ -40,16 +40,17 @@ def search_course2(request):
     # print(course_result2)
     return render(request, 'polls/search_course.html', context)
 
+
 def search_course(request):
     if request.GET:
         # print(request.GET)
         dept = request.GET["dept"].split(":")[1]
         # 1 = alphabetical; 2 = course code; 3 = relevance
-        #sort_option = request.GET["sort"]
+        # sort_option = request.GET["sort"]
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
         course_result = CourseInfo.search_course_tool(search_content, dept, 2)[:10]
-        #course_result = []
+        # course_result = []
         context = {
             'search_results': course_result,
             'dept': dept,
@@ -64,11 +65,14 @@ def search_course(request):
     # print(course_result)
     return render(request, 'polls/search_course.html', context)
 
+
 # List the detail information of course
 def course_detail(request, name_num):
     course = CourseInfo.objects.filter(course_code=name_num)
     if len(course) == 1:
-        context = {'course_info': course[0]}
+        related_links = search_related_links(course[0])
+        context = {'course_info': course[0],
+                   'related_links': related_links}
         return render(request, 'polls/course.html', context)
     else:
         return Http404('Course not found')

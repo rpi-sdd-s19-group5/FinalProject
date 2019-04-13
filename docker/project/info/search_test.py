@@ -3,12 +3,12 @@ import os
 import sys
 
 import django
+from info.models import ProfInfo
+from info.models import CourseInfo
 
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
 if 'setup' in dir(django): django.setup()
-from info.models import ProfInfo
-from info.models import CourseInfo
 
 
 def search_course_tool(kw, dept_kw, sort_option=1):

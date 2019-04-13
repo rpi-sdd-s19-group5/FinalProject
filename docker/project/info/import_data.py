@@ -3,12 +3,12 @@ import re
 import sys
 
 import django
+from info.models import CourseInfo, ProfInfo
 
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
-if 'setup' in dir(django): django.setup()
-
-from info.models import CourseInfo, ProfInfo
+if 'setup' in dir(django):
+    django.setup()
 
 
 def update_course_info(course):
@@ -54,7 +54,6 @@ def update_prof_info(prof):
         url=url, name=name, title=title, dept=dept, email=email, web_page=web_page, focus=focus, education=education,
         biography=biography, image=image
     )
-
 
 # from info.models import CourseInfo
 # from info.course_info import course_info_crawler

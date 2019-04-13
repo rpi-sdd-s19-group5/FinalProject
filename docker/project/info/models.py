@@ -103,3 +103,12 @@ class ProfAndCourses(models.Model):
         for x in result_3:
             print(x['title'])
         return result_3
+
+
+class RelatedPages(models.Model):
+    links = models.URLField()
+    title = models.TextField(blank=True, null=True)
+    course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
+    # Update time
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
