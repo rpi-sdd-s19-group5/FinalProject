@@ -4,7 +4,6 @@ from django.shortcuts import render
 from info.models import CourseInfo, ProfAndCourses
 from info.models import ProfInfo
 from info.scripts.util_functions import search_related_links
-from info.search_test import search_course_tool
 
 
 def index(request):
