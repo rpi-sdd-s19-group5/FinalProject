@@ -172,7 +172,7 @@ def get_people(url):
     page["image"] = get_image(driver)
 
     # Save to database
-    from info.import_data import update_prof_info
+    from info.scripts.import_data import update_prof_info
     update_prof_info(page)
     driver.quit()
     return page
