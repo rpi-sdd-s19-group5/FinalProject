@@ -1,6 +1,50 @@
-{% extends 'polls/base.html' %}
-{% block title %}RPI Advanced Academic Catalog{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+
+    <style>
+        h5 {
+            color: rgb(153, 0, 0);
+        }
+
+        p {
+            color: black;
+            font-size: 16px;
+        }
+
+        .redcolor {
+            background-color: rgb(153, 0, 0);
+        }
+
+        #search {
+            width: 357px;
+            margin: 4px auto;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .scroll-menu {
+            height: auto;
+            max-height: 200px;
+            overflow-x: hidden;
+        }
+    </style>
+    <title>RPI Advanced Academic Catalog</title>
+
+</head>
 <body ng-app="myApp" ng-controller="MyCtrl">
 <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
     <a href="{% url "index" %}"><img
@@ -21,9 +65,9 @@
     </div>
 </nav>
 <div class="container">
-    <div style="margin: 4px auto; text-align: center; width: 1000px; padding-top: 100px;">
-        <form action="{% url "search_course" %}" method="get">
-            <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
+    <div style="margin: 4px auto; text-align: center; width: 1200px; padding-top: 100px;">
+        <form action="{% url "search_course2" %}" method="get">
+            <div class="row" style="margin: 4px auto; text-align: center; width: 1018px;">
                 <div class="col-auto">
                     <select name="dept" ng-model="dep" ng-init="dep=names[0]" ng-options="x for x in names"
                             style="height: 38px;"></select>
@@ -38,6 +82,13 @@
                             style="background-color: rgb(153, 0, 0); border-color: rgb(153, 0, 0);">Search
                     </button>
                 </div>
+                <div class="col-auto">
+                    <select name="sort" class="custom-select">
+                        <option value="1">Sort by: Alphabet</option>
+                        <option value="2">Sort by: Course Code</option>
+                        <option value="3">Sort by: Relevance</option>
+                    </select>
+                </div>
             </div>
         </form>
     </div>
@@ -45,14 +96,12 @@
         <div class="row" style="padding-top: 10px;">
             <div class="col-auto">
                 <a href="{% url "course_detail" name_num=course.course_code %}">
-                    <h5 style="color: rgb(153, 0, 0);">{{ course.course_code }} {{ course.title }}</h5></a>
+                    <h5>{{ course.course_code }} {{ course.title }}</h5></a>
                 <p style="overflow: hidden;
                 text-overflow: ellipsis;
                 display: -webkit-box;
                 -webkit-line-clamp:3;
-                -webkit-box-orient: vertical;
-                color: black;
-                font-size: 16px; ">{{ course.description }}</p>
+                -webkit-box-orient: vertical;">{{ course.description }}</p>
             </div>
         </div>
     {% endfor %}
@@ -66,4 +115,4 @@
 
 </script>
 </body>
-{% endblock %}>
+</html>
