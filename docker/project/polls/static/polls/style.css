@@ -1,0 +1,29 @@
+.redcolor {
+    background-color: rgb(153, 0, 0);
+}
+
+p.display {
+    color: black;
+    font-size: 14px;
+    margin-top: -7px;
+}
+
+h3.red {
+    color: rgb(153, 0, 0);
+}
+
+h6.fontType {
+    font-weight: bold;
+}
+
+p.display {
+    color: black;
+    font-size: 14px;
+    margin-top: -7px;
+}
+
+p.colorFont {
+    color: black;
+    font-size: 14px;
+}
+
