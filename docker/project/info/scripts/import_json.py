@@ -2,13 +2,13 @@ import os
 import sys
 
 import django
+from info.models import ProfAndCourses
+import json
 
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
-if 'setup' in dir(django): django.setup()
-
-from info.models import ProfAndCourses
-import json
+if 'setup' in dir(django):
+    django.setup()
 
 
 def json_to_dict():

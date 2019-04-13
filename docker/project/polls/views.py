@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, Invali
 
 from info.models import CourseInfo, ProfAndCourses
 from info.models import ProfInfo
-from info.search_test import search_test
+from info.scripts.util_functions import search_related_links
 
 
 def index(request):
@@ -16,13 +16,42 @@ def index_prof(request):
 
 
 # List the search results from required parameter
-def search_course(request):
+def search_course2(request):
     if request.GET and "search_content" in request.GET:
         print(request.GET)
         dept = request.GET["dept"].split(":")[1]
+        # 1 = alphabetical; 2 = course code; 3 = relevance
+        sort_option = request.GET["sort"]
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
-        course_result = search_test(search_content, dept)
+        course_result2 = CourseInfo.search_course_tool(search_content, dept, sort_option)[:10]
+
+        context = {
+            'search_results': course_result2,
+            'dept': dept,
+            'search_content': search_content,
+            'sort_value': sort_option,
+        }
+    else:
+        course_result2 = CourseInfo.objects.all()[:10]
+        context = {
+            'search_results': course_result2,
+        }
+
+    # print(course_result2)
+    return render(request, 'polls/search_course.html', context)
+
+
+def search_course(request):
+    if request.GET and "search_content" in request.GET:
+        # print(request.GET)
+        dept = request.GET["dept"].split(":")[1]
+        # 1 = alphabetical; 2 = course code; 3 = relevance
+        # sort_option = request.GET["sort"]
+        dept = ("ALL" if dept == "All Departments" else dept)
+        search_content = request.GET["search_content"]
+        course_result = CourseInfo.search_course_tool(search_content, dept, 2)[:10]
+        # course_result = []
         context = {
             'search_results': course_result,
             'dept': dept,
@@ -47,6 +76,7 @@ def search_course(request):
             courses = paginator.page(paginator.num_pages)
     context['search_results'] = courses
     print(course_result)
+
     return render(request, 'polls/search_course.html', context)
 
 
@@ -54,7 +84,9 @@ def search_course(request):
 def course_detail(request, name_num):
     course = CourseInfo.objects.filter(course_code=name_num)
     if len(course) == 1:
-        context = {'course_info': course[0]}
+        related_links = search_related_links(course[0])
+        context = {'course_info': course[0],
+                   'related_links': related_links}
         return render(request, 'polls/course.html', context)
     else:
         return Http404('Course not found')
@@ -66,7 +98,8 @@ def search_prof(request):
         print(request.GET)
         search_content = request.GET["search_content"]
         print(search_content)
-        prof_result = ProfInfo.search_test_prof(search_content)[:10]
+        prof_result = ProfInfo.search_prof_tool(search_content)[:10]
+
         for prof in prof_result: prof["dept"] = prof["dept"].replace('|', ' ')
         context = {
             'search_results': prof_result,

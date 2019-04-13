@@ -15,27 +15,35 @@ class CourseInfo(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     @staticmethod
-    def search_test(kw, dept_kw):
+    def search_course_tool(kw, dept_kw, sort_option=1):
         kw = kw.upper()
         dept_kw = dept_kw.upper()
         global result
         # search in all departments
         if dept_kw == "ALL":
+            print(sort_option)
             print("searching in all depts")
-            result1 = CourseInfo.objects.filter(course_code__iexact=kw).order_by('title')
-            result2 = CourseInfo.objects.filter(title__icontains=kw).order_by('title')
-            result3 = CourseInfo.objects.filter(description__icontains=kw).order_by('title')
+            result1 = CourseInfo.objects.filter(course_code__iexact=kw)
+            result2 = CourseInfo.objects.filter(title__icontains=kw)
+            result3 = CourseInfo.objects.filter(description__icontains=kw)
             result = result1 | result2 | result3
             result.distinct()
         else:
-            result1 = CourseInfo.objects.filter(dept=dept_kw).filter(course_code__iexact=kw).order_by('title')
-            result2 = CourseInfo.objects.filter(dept=dept_kw).filter(title__icontains=kw).order_by('title')
-            result3 = CourseInfo.objects.filter(dept=dept_kw).filter(description__icontains=kw).order_by('title')
+            result1 = CourseInfo.objects.filter(dept=dept_kw).filter(course_code__iexact=kw)
+            result2 = CourseInfo.objects.filter(dept=dept_kw).filter(title__icontains=kw)
+            result3 = CourseInfo.objects.filter(dept=dept_kw).filter(description__icontains=kw)
             result = result1 | result2 | result3
             result.distinct()
-
-        result = result.order_by('title')
+        if sort_option == "1":
+            print("order1")
+            result = result.order_by('title')
+        elif sort_option == "2":
+            print("order")
+            result = result.order_by('course_code')
+        # for x in range(0, len(result)):
+        #     print(result[x].title)
         result_2 = list(result.values())
+        # print(result_2)
         return result_2
 
 
@@ -56,7 +64,7 @@ class ProfInfo(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     @staticmethod
-    def search_test_prof(kw):
+    def search_prof_tool(kw):
         kw = kw.upper()
         result_1 = ProfInfo.objects.filter(name__icontains=kw).order_by('name')
         result_2 = list(result_1.values())
@@ -95,3 +103,12 @@ class ProfAndCourses(models.Model):
         for x in result_3:
             print(x['title'])
         return result_3
+
+
+class RelatedPages(models.Model):
+    links = models.URLField()
+    title = models.TextField(blank=True, null=True)
+    course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
+    # Update time
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)

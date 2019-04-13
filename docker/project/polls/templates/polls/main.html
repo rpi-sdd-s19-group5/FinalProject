@@ -30,8 +30,10 @@
             <form action="{% url "search_course" %}" method="get">
                 <div class="row" style="margin: 4px auto; text-align: center; width: 718px;">
                     <div class="col-auto">
-                        <select name="dept" ng-model="dep" ng-init="dep=names[0]" ng-options="x for x in names"
-                                style="height: 38px;"></select>
+                        <label>
+                            <select name="dept" ng-model="dep" ng-init="dep=names[0]" ng-options="x for x in names"
+                                    style="height: 38px;"></select>
+                        </label>
                     </div>
                     <div class="col-auto">
                         <input type="text" ng-model="course_search" name="search_content" placeholder="Course"
