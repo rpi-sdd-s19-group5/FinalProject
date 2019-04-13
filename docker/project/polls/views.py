@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 from info.models import CourseInfo, ProfAndCourses
 from info.models import ProfInfo
+from info.scripts.util_functions import search_related_links
 from info.search_test import search_test
 
 
@@ -41,7 +42,9 @@ def search_course(request):
 def course_detail(request, name_num):
     course = CourseInfo.objects.filter(course_code=name_num)
     if len(course) == 1:
-        context = {'course_info': course[0]}
+        related_links = search_related_links(course[0])
+        context = {'course_info': course[0],
+                   'related_links': related_links}
         return render(request, 'polls/course.html', context)
     else:
         return Http404('Course not found')
