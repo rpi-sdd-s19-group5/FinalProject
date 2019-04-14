@@ -70,7 +70,7 @@ def course_detail(request, name_num):
 
 # List all related professors
 def search_prof(request):
-    if request.GET:
+    if request.GET and 'search_content' in request.GET:
         print(request.GET)
         dept = request.GET["dept"].split(":")[1]
         dept = ("ALL" if dept == "All Departments" else dept)
@@ -87,12 +87,23 @@ def search_prof(request):
             'search_content': search_content,
         }
     else:
-        prof_result = ProfInfo.objects.all()[:10]
+        prof_result = ProfInfo.objects.all()
         for prof in prof_result: prof.dept = prof.dept.replace('|', ' ')
         context = {
             'search_results': prof_result,
         }
-
+    paginator = Paginator(prof_result, 10)
+    if request.method == "GET":
+        page = request.GET.get('page', 1)
+        try:
+            profs = paginator.page(page)
+        except PageNotAnInteger:
+            profs = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('Cannot find anything')
+        except EmptyPage:
+            profs = paginator.page(paginator.num_pages)
+    context['search_results'] = profs
     return render(request, 'polls/search_faculty.html', context)
 
 
