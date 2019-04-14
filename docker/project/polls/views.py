@@ -24,20 +24,26 @@ def search_course(request):
         if "sort" in request.GET:
             sort_option = request.GET["sort"]
         else:
-            sort_option = 1
+            sort_option = "1"
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
         course_result = CourseInfo.search_course_tool(search_content, dept, sort_option)
+        dept = "All Departments"
+
+        # Change to digit
+        sort_option = (int(sort_option) if sort_option.isdigit() else 1)
         context = {
             'search_results': course_result,
             'dept': dept,
             'search_content': search_content,
+            'sort_option': sort_option - 1,
         }
     else:
         course_result = CourseInfo.objects.all()
         context = {
             'search_results': course_result,
             'dept': 'All Departments',
+            'sort_option': 0,
             'search_content': "",
         }
     paginator = Paginator(course_result, 10)

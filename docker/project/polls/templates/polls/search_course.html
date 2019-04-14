@@ -83,11 +83,13 @@
                     </button>
                 </div>
                 <div class="col-auto">
-                    <select name="sort" class="custom-select">
-                        <option value="1">Sort by: Alphabet</option>
-                        <option value="2">Sort by: Course Code</option>
-                        <option value="3">Sort by: Relevance</option>
-                    </select>
+                    <label>
+                        <select id="select" name="sort" class="custom-select">
+                            <option value="1">Sort by: Alphabet</option>
+                            <option value="2">Sort by: Course Code</option>
+                            <option value="3">Sort by: Relevance</option>
+                        </select>
+                    </label>
                 </div>
             </div>
         </form>
@@ -114,17 +116,37 @@
                 </li>
                 {% if search_results.has_previous %}
                     <a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.previous_page_number }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">Previous</a>
                 {% endif %}
                 {% if search_results.number|add:-2 > 0 %}
                     <li class="page-item"><a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.number|add:-2 }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">{{ search_results.number|add:-2 }}</a>
                     </li>
                     <li class="page-item"><a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.number|add:-1 }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">{{ search_results.number|add:-1 }}</a>
                     </li>
                 {% elif search_results.number|add:-1 > 0 %}
                     <li class="page-item"><a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.number|add:-1 }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">{{ search_results.number|add:-1 }}</a>
                     </li>
                 {% endif %}
@@ -132,13 +154,28 @@
                 </li>
                 {% if search_results.number|add:2 <= search_results.paginator.num_pages %}
                     <li class="page-item"><a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.number|add:1 }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">{{ search_results.number|add:1 }}</a>
                     </li>
                     <li class="page-item"><a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.number|add:2 }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">{{ search_results.number|add:2 }}</a>
                     </li>
                 {% elif search_results.number|add:1 <= search_results.paginator.num_pages %}
                     <li class="page-item"><a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.number|add:1 }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">{{ search_results.number|add:1 }}</a>
                     </li>
                 {% endif %}
@@ -155,11 +192,20 @@
                     Page {{ search_results.number }} of {{ search_results.paginator.num_pages }}</span>-->
                 {% if search_results.has_next %}
                     <a class='active page-link' href="?page=
+
+
+
+
+
                             {{ search_results.next_page_number }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">Next</a>
                 {% endif %}
                 <a class='active page-link' href="?page=
+
+
+
+
+
                         {{ search_results.paginator.num_pages }}{% if request.GET.dept %}&dept={{ request.GET.dept }}{% endif %}{% if request.GET.search_content %}&search_content={{ request.GET.search_content }}{% endif %}">Last</a>
-                </li>
             </ul>
         </nav>
     </div>
@@ -170,6 +216,10 @@
     app.controller('MyCtrl', function ($scope) {
         $scope.names = ["All Departments", "ARCH", "ARTS", "ASTR", "BCBP", "BIOL", "BMED", "CHEM", "CHME", "CISH or CSCI", "CIVL", "COGS", "COMM", "CSCI", "ECON", "ECSE", "ENGR", "ENVE", "ERTH", "ESCI", "GSAS", "IENV", "IHSS", "ISCI", "ISYE", "ITWS", "LANG", "LGHT", "LITR", "MANE", "MATH", "MATP", "MTLE", "PHIL", "PHYS", "PSYC", "STSH", "STSS", "USAF", "USAR", "USNA", "WRIT"];
     });
+    onload = function () {
+        document.getElementById("select").selectedIndex = {{ sort_option|slugify }};
+    }
+
 
 </script>
 </body>
