@@ -72,10 +72,15 @@ def course_detail(request, name_num):
 def search_prof(request):
     if request.GET:
         print(request.GET)
+        dept = request.GET["dept"].split(":")[1]
+        dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
         print(search_content)
-        prof_result = ProfInfo.search_prof_tool(search_content)[:10]
-
+        global prof_result
+        if dept == "ALL":
+            prof_result = ProfInfo.search_prof_tool(search_content)[:10]
+        else:
+            prof_result = ProfAndCourses.search_prof_by_dept(dept, search_content)[:10]
         for prof in prof_result: prof["dept"] = prof["dept"].replace('|', ' ')
         context = {
             'search_results': prof_result,
@@ -98,7 +103,7 @@ def prof_detail(request, name, db_id):
         prof = result[0]
     else:
         return Http404('Prof not found')
-    courses = ProfAndCourses.search_test(name)
+    courses = ProfAndCourses.search_course_by_prof(name)
     print(courses)
     context = {'prof_info': prof, 'prof_course': courses}
     return render(request, 'polls/faculty.html', context)
