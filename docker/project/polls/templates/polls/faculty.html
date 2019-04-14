@@ -84,7 +84,7 @@
         <div class="row">
             <div class="col-auto" style="padding-top: 20px;">
                 <h6 style="font-weight: bold;">Courses:</h6>
-                {% if prof_course.count == 0 %}
+                {% if prof_course.count != 0 %}
                     {% for course in prof_course %}
                         <div class="col-auto">
                             <a href="{% url "course_detail" name_num=course.course_code %}">
