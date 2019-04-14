@@ -1,5 +1,6 @@
 import os
 import sys
+
 import django
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities

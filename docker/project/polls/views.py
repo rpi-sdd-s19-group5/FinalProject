@@ -24,20 +24,26 @@ def search_course(request):
         if "sort" in request.GET:
             sort_option = request.GET["sort"]
         else:
-            sort_option = 1
+            sort_option = "1"
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
         course_result = CourseInfo.search_course_tool(search_content, dept, sort_option)
+        dept = ("All Departments" if dept == "ALL" else dept)
+
+        # Change to digit
+        sort_option = (int(sort_option) if sort_option.isdigit() else 1)
         context = {
             'search_results': course_result,
             'dept': dept,
             'search_content': search_content,
+            'sort_option': sort_option - 1,
         }
     else:
         course_result = CourseInfo.objects.all()
         context = {
             'search_results': course_result,
             'dept': 'All Departments',
+            'sort_option': 0,
             'search_content': "",
         }
     paginator = Paginator(course_result, 10)
@@ -73,36 +79,41 @@ def search_prof(request):
     if request.GET and 'search_content' in request.GET:
         print(request.GET)
         dept = request.GET["dept"].split(":")[1]
+        print(dept)
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
-        print(search_content)
-        global prof_result
         if dept == "ALL":
-            prof_result = ProfInfo.search_prof_tool(search_content)[:10]
+            prof_result = ProfInfo.search_prof_tool(search_content)
         else:
-            prof_result = ProfAndCourses.search_prof_by_dept(dept, search_content)[:10]
-        for prof in prof_result: prof["dept"] = prof["dept"].replace('|', ' ')
+            prof_result = ProfAndCourses.search_prof_by_dept(dept, search_content)
+
+        for prof in prof_result:
+            prof["dept"] = prof["dept"].replace('|', ' ')
+        dept = ("All Departments" if dept == "ALL" else dept)
         context = {
             'search_results': prof_result,
             'search_content': search_content,
+            'dept': dept,
         }
     else:
         prof_result = ProfInfo.objects.all()
-        for prof in prof_result: prof.dept = prof.dept.replace('|', ' ')
+
+        for prof in prof_result:
+            prof.dept = prof.dept.replace('|', ' ')
         context = {
             'search_results': prof_result,
+            'dept': "All Departments",
         }
     paginator = Paginator(prof_result, 10)
-    if request.method == "GET":
-        page = request.GET.get('page', 1)
-        try:
-            profs = paginator.page(page)
-        except PageNotAnInteger:
-            profs = paginator.page(1)
-        except InvalidPage:
-            return HttpResponse('Cannot find anything')
-        except EmptyPage:
-            profs = paginator.page(paginator.num_pages)
+    page = request.GET.get('page', 1)
+    try:
+        profs = paginator.page(page)
+    except PageNotAnInteger:
+        profs = paginator.page(1)
+    except EmptyPage:
+        profs = paginator.page(paginator.num_pages)
+    except InvalidPage:
+        return HttpResponse('Cannot find anything')
     context['search_results'] = profs
     return render(request, 'polls/search_faculty.html', context)
 
@@ -115,6 +126,7 @@ def prof_detail(request, name, db_id):
     else:
         return Http404('Prof not found')
     courses = ProfAndCourses.search_course_by_prof(name)
-    print(courses)
+    print(len(courses))
+
     context = {'prof_info': prof, 'prof_course': courses}
     return render(request, 'polls/faculty.html', context)

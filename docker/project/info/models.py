@@ -92,6 +92,7 @@ class ProfAndCourses(models.Model):
 
     @staticmethod
     def search_course_by_prof(kw):
+        # print(kw)
         result_1 = ProfAndCourses.objects.filter(prof__icontains=kw)
         result_2 = list(result_1.values("course_code"))
         # print(result_2)
@@ -100,8 +101,8 @@ class ProfAndCourses(models.Model):
             if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
                 result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
         # result_3 = list(result_3.values())
-        for x in result_3:
-            print(x['title'])
+        # for x in result_3:
+        #     print(x['title'])
         return result_3
 
     @staticmethod
@@ -116,10 +117,8 @@ class ProfAndCourses(models.Model):
                 if x["name"].lower() in y["prof"].lower():
                     result_3.append(x)
                     break
-        print(result_3)
+        # print(result_3)
         return result_3
-
-
 
 
 class RelatedPages(models.Model):
