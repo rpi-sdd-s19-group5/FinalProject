@@ -1,11 +1,13 @@
 import os
 import sys
-
+import django
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
+if 'setup' in dir(django):
+    django.setup()
 
 
 def get_url(driver, case):
