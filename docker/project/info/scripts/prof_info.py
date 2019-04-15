@@ -40,8 +40,12 @@ def get_url(driver, case):
     return ans
 
 
-# Function returns a webdriver object
 def get_driver(url):
+    """
+    Function returns a webdriver object
+    :param url: String
+    :return: selenium drive
+    """
     driver = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',
         desired_capabilities=DesiredCapabilities.CHROME)
@@ -85,25 +89,6 @@ def get_image(driver):
             if "https://faculty.rpi.edu/" in try2: ans.append(try2)
         except:
             print("get_image fail to get image address from {}".format(driver))
-    return ans
-
-
-# Function returns text line based input rules
-def extract(line, re):
-    ans = []
-    if re != "":
-        for l in line:
-            try:
-                if re in line:
-                    ans.append(line.text)
-            except:
-                print("extract unable to get text from line")
-    else:
-        for _ in line:
-            try:
-                ans.append(line.text)
-            except:
-                print("extract unable to get text from line")
     return ans
 
 

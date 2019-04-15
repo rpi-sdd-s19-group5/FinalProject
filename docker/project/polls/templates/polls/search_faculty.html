@@ -26,8 +26,10 @@
             <form action="{% url 'search_prof' %}" method="get">
                 <div class="row" style="margin: 4px auto; text-align: center; width: 1018px;">
                     <div class="col-auto">
-                        <select ng-model="dep" name="dept" ng-init="dep='{{ dept|safe }}'" ng-options="x for x in names"
-                                style="height: 38px;"></select>
+                        <label>
+                            <select ng-model="dep" name="dept" ng-init="dep='{{ dept|safe }}'" ng-options="x for x in names"
+                                    style="height: 38px;"></select>
+                        </label>
                     </div>
                     <div class="col-auto">
                         <label>
