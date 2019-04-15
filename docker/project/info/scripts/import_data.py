@@ -5,18 +5,19 @@ import sys
 import django
 from info.models import CourseInfo, ProfInfo
 
+# Setting up environment
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
 if 'setup' in dir(django):
     django.setup()
 
 
-# get the latest course info
 def update_course_info(course):
     """
-    :param A dict object that contains the information of the entry that is going to be inserted
+    get the latest course info
+    :param course: a dict object that contains the information of the entry that is going to be inserted
     """
-    #setting up data
+    # setting up data
     title = course["title"].split("-")[1].strip()
     dept = course["title"][0:4].upper()
     course_code = course["title"].split('-', 1)[0].strip()
@@ -47,9 +48,9 @@ def update_course_info(course):
 # get the latest faculty info
 def update_prof_info(prof):
     """
-    :param A dict object that contains the information of the entry that is going to be inserted
+    :param prof: a dict object that contains the information of the entry that is going to be inserted
     """
-    #setting up the data to be inserted
+    # setting up the data to be inserted
     url = prof["url"]
     name = prof["name"][0]
     title = '|'.join(prof["title"])
@@ -60,41 +61,8 @@ def update_prof_info(prof):
     education = '|'.join(prof["education"])
     biography = ' '.join(prof["biography"])
     image = ''.join(prof["image"])
-    #add the entry to the database
+    # add the entry to the database
     ProfInfo.objects.update_or_create(
         url=url, name=name, title=title, dept=dept, email=email, web_page=web_page, focus=focus, education=education,
         biography=biography, image=image
     )
-
-# from info.models import CourseInfo
-# from info.course_info import course_info_crawler
-#
-# if __name__ == '__main__':
-#     course_info = course_info_crawler()
-#     for course in course_info:
-#         c = CourseInfo()
-#         temp = course["title"].split()
-#         temp2 = ""
-#         for x in range(3, len(temp)):
-#             if x != len(temp) - 1:
-#                 temp2 += temp[x]
-#                 temp2 += " "
-#             else:
-#                 temp2 += temp[x]
-#         c.title = temp2
-#         c.dept = course["title"][0:4].upper()
-#         print(c.dept)
-#
-#
-#         c.course_code = temp[0] + " " + temp[1]
-#         print(c.course_code)
-#         c.description = course["description"]
-#         c.prerequisites = course["prerequisites"]
-#         c.offered = course["offered"]
-#         c.cross_listed = course["cross_listed"]
-#         if not course["credit_hours"]:
-#             c.credit_hours = None
-#         else:
-#             c.credit_hours = int(re.findall("\d+", course["credit_hours"])[0])
-#         c.save()
-#

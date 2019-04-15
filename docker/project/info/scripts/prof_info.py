@@ -92,25 +92,6 @@ def get_image(driver):
     return ans
 
 
-# Function returns text line based input rules
-def extract(line, re):
-    ans = []
-    if re != "":
-        for l in line:
-            try:
-                if re in line:
-                    ans.append(line.text)
-            except:
-                print("extract unable to get text from line")
-    else:
-        for _ in line:
-            try:
-                ans.append(line.text)
-            except:
-                print("extract unable to get text from line")
-    return ans
-
-
 # Function returns text line from list of selector
 def line(selector):
     """
