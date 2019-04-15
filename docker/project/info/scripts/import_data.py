@@ -12,6 +12,10 @@ if 'setup' in dir(django):
 
 
 def update_course_info(course):
+    """
+    :param A dict object that contains the information of the entry that is going to be inserted
+    """
+    #setting up data
     title = course["title"].split("-")[1].strip()
     dept = course["title"][0:4].upper()
     course_code = course["title"].split('-', 1)[0].strip()
@@ -40,6 +44,10 @@ def update_course_info(course):
 
 
 def update_prof_info(prof):
+    """
+    :param A dict object that contains the information of the entry that is going to be inserted
+    """
+    #setting up the data to be inserted
     url = prof["url"]
     name = prof["name"][0]
     title = '|'.join(prof["title"])
@@ -50,6 +58,7 @@ def update_prof_info(prof):
     education = '|'.join(prof["education"])
     biography = ' '.join(prof["biography"])
     image = ''.join(prof["image"])
+    #add the entry to the database
     ProfInfo.objects.update_or_create(
         url=url, name=name, title=title, dept=dept, email=email, web_page=web_page, focus=focus, education=education,
         biography=biography, image=image
