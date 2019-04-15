@@ -5,20 +5,27 @@ import django
 from info.models import ProfAndCourses
 import json
 
+# environment setup
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
 if 'setup' in dir(django):
     django.setup()
 
 
+# convert json to dict format
 def json_to_dict():
     results = []
+    #opens the json file
     with open("19Spring.json") as json_file:
+        #load stuff
         data = json.load(json_file)
+        #skipping the first 9 rows because of the data structure
         for x in range(9, len(data) - 1):
             # print(data[x])
+            #if it's an empty row
             if len(data[x]) == 0:
                 continue
+            #otherwise we'll start reading stuff
             else:
                 entry = {}
                 entry["dept"] = data[x]["Subj"].strip()
@@ -35,7 +42,7 @@ def json_to_dict():
                     entry["course_code"] = last.course_code
                     entry["section"] = last.section
                     entry["credit"] = last.credit
-
+                # update the dict
                 entry["prof"] = ' '.join(data[x]["Instructor"].split())
                 print(entry["prof"])
                 entry["days"] = data[x]["Days"]
@@ -52,8 +59,9 @@ def json_to_dict():
                     date=entry["date"], days=entry["days"], time=entry["time"], location=entry["location"],
                     section=entry["section"]
                 )
-
+    # update faculty & course relation in database
     for entry in results:
+        #insert stuff into the database
         ProfAndCourses().objects.update_or_create(
             course_code=entry["course_code"], dept=entry["dept"], prof=entry["prof"], code_digit=entry["code_digit"],
             credit=entry["credit"],
