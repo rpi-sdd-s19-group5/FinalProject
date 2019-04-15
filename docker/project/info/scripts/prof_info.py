@@ -40,8 +40,12 @@ def get_url(driver, case):
     return ans
 
 
-# Function returns a webdriver object
 def get_driver(url):
+    """
+    Function returns a webdriver object
+    :param url: String
+    :return: selenium drive
+    """
     driver = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',
         desired_capabilities=DesiredCapabilities.CHROME)
