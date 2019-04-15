@@ -5,7 +5,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top redcolor">
         <a href="{% url "index" %}"><img
                 src="https://www.rpi.edu/dept/cct/apps/web-branding/v2/header/meganav/img/RPIlogo_white.png"
-                height="40px"></a>
+                height="40px" alt="HTML5"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,12 +26,16 @@
             <form action="{% url "search_course" %}" method="get">
                 <div class="row" style="margin: 4px auto; text-align: center; width: 1018px;">
                     <div class="col-auto">
-                        <select name="dept" ng-model="dep" ng-init="dep='{{ dept }}'" ng-options="x for x in names"
-                                style="height: 38px;"></select>
+                        <label>
+                            <select name="dept" ng-model="dep" ng-init="dep='{{ dept }}'" ng-options="x for x in names"
+                                    style="height: 38px;"></select>
+                        </label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" value="{{ search_content }}" placeholder="Course" name="search_content"
-                               style="height: 38px; width: 400px;">
+                        <label>
+                            <input type="text" value="{{ search_content }}" placeholder="Course" name="search_content"
+                                   style="height: 38px; width: 400px;">
+                        </label>
 
                     </div>
                     <div class="col-auto">
