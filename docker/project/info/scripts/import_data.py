@@ -11,7 +11,9 @@ if 'setup' in dir(django):
     django.setup()
 
 
+# get the latest course info
 def update_course_info(course):
+	# specify course info into title, dept, course code and description
     title = course["title"].split("-")[1].strip()
     dept = course["title"][0:4].upper()
     course_code = course["title"].split('-', 1)[0].strip()
@@ -21,7 +23,7 @@ def update_course_info(course):
     except IndexError as e:
         prerequisites = None
         print("Prerequisites/Corequisites Error, Maybe format error")
-
+    # update the info by when it is offered & misc
     offered = (None if not course["offered"] else course["offered"])
     cross_listed = (None if not course["cross_listed"] else course["cross_listed"])
 
@@ -39,7 +41,9 @@ def update_course_info(course):
     )
 
 
+# get the latest faculty info
 def update_prof_info(prof):
+	# update the info into several genres
     url = prof["url"]
     name = prof["name"][0]
     title = '|'.join(prof["title"])
@@ -50,6 +54,7 @@ def update_prof_info(prof):
     education = '|'.join(prof["education"])
     biography = ' '.join(prof["biography"])
     image = ''.join(prof["image"])
+    # update the info in database
     ProfInfo.objects.update_or_create(
         url=url, name=name, title=title, dept=dept, email=email, web_page=web_page, focus=focus, education=education,
         biography=biography, image=image
