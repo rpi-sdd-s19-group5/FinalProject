@@ -11,6 +11,7 @@ if 'setup' in dir(django):
     django.setup()
 
 
+# get the latest course info
 def update_course_info(course):
     """
     :param A dict object that contains the information of the entry that is going to be inserted
@@ -25,7 +26,7 @@ def update_course_info(course):
     except IndexError as e:
         prerequisites = None
         print("Prerequisites/Corequisites Error, Maybe format error")
-
+    # update the info by when it is offered & misc
     offered = (None if not course["offered"] else course["offered"])
     cross_listed = (None if not course["cross_listed"] else course["cross_listed"])
 
@@ -43,6 +44,7 @@ def update_course_info(course):
     )
 
 
+# get the latest faculty info
 def update_prof_info(prof):
     """
     :param A dict object that contains the information of the entry that is going to be inserted

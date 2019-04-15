@@ -5,12 +5,14 @@ import django
 from info.models import ProfAndCourses
 import json
 
+# environment setup
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
 if 'setup' in dir(django):
     django.setup()
 
 
+# convert json to dict format
 def json_to_dict():
     results = []
     #opens the json file
@@ -40,7 +42,7 @@ def json_to_dict():
                     entry["course_code"] = last.course_code
                     entry["section"] = last.section
                     entry["credit"] = last.credit
-
+                # update the dict
                 entry["prof"] = ' '.join(data[x]["Instructor"].split())
                 print(entry["prof"])
                 entry["days"] = data[x]["Days"]
@@ -57,7 +59,7 @@ def json_to_dict():
                     date=entry["date"], days=entry["days"], time=entry["time"], location=entry["location"],
                     section=entry["section"]
                 )
-
+    # update faculty & course relation in database
     for entry in results:
         #insert stuff into the database
         ProfAndCourses().objects.update_or_create(
