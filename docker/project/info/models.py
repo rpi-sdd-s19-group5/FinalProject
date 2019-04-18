@@ -122,7 +122,7 @@ class ProfAndCourses(models.Model):
 
 
 class RelatedPages(models.Model):
-    links = models.URLField()
+    links = models.URLField(max_length=255)
     title = models.TextField(blank=True, null=True)
     course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
     # Update time
