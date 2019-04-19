@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 
 
 # Create your models here.
@@ -38,8 +39,13 @@ class CourseInfo(models.Model):
             print("order1")
             result = result.order_by('title')
         elif sort_option == "2":
-            print("order")
+            print("order2")
             result = result.order_by('course_code')
+        elif sort_option == "3":
+            print("order3")
+            vector = SearchVector('title', weight = 'A') + SearchVector('description', weight = 'C')
+            query = SearchQuery(kw)
+            result = result.annotate(rank = SearchRank(vector, query)).order_by('-rank', 'course_code')
         # for x in range(0, len(result)):
         #     print(result[x].title)
         result_2 = list(result.values())
@@ -122,7 +128,7 @@ class ProfAndCourses(models.Model):
 
 
 class RelatedPages(models.Model):
-    links = models.URLField()
+    links = models.URLField(max_length=512)
     title = models.TextField(blank=True, null=True)
     course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
     # Update time
