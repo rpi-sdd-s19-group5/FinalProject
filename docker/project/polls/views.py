@@ -29,7 +29,7 @@ def search_course(request):
         if "sort" in request.GET:
             sort_option = request.GET["sort"]
         else:
-            sort_option = "1"
+            sort_option = "3"
         # search all departments if no specific department
         dept = ("ALL" if dept == "All Departments" else dept)
         search_content = request.GET["search_content"]
