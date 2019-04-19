@@ -1,36 +1,51 @@
 import os
 import sys
 
+import django
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 
+# Setting up environment
 sys.path.append("/src")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoTest.settings'
+if 'setup' in dir(django):
+    django.setup()
 
 
+# Function returns the department and professor's webpages in one time
+# Case 1: get lists of department
+# Case 2: get lists of teacher
 def get_url(driver, case):
     ans = []
     size_need = len("https://faculty.rpi.edu/departments")
-    link = driver.find_elements_by_tag_name("a")
+    link = driver.find_elements_by_tag_name("a")  # get all urls in one time
     for n in link:
         try:
             try1 = n.get_attribute('href')
             if case == 1:
+                # Assert the urls is correct
                 if ("https://faculty.rpi.edu/departments" in try1 and len(
                         try1) > size_need and "main-content" not in try1):
                     # print try1
                     ans.append(try1)
             if case == 2:
+                # Assert the urls is correct
                 if "https://faculty.rpi.edu/" in try1 and "-" in try1 and "main-content" not in try1:
                     # print try1
                     ans.append(try1)
         except TypeError as e:
-            print("ERROR:None")
+            # Fail to get the webpage
+            print("ERROR: get_url unable to get attribute from {} ".format(n))
     driver.quit()
     return ans
 
 
 def get_driver(url):
+    """
+    Function returns a webdriver object
+    :param url: String
+    :return: selenium drive
+    """
     driver = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',
         desired_capabilities=DesiredCapabilities.CHROME)
@@ -38,6 +53,7 @@ def get_driver(url):
     return driver
 
 
+# Function returns string of a given web page title
 def get_name(driver):
     name = []
     try:
@@ -45,10 +61,11 @@ def get_name(driver):
         name.append(n.text)
         # print(name.text)
     except:
-        print("?")
+        print("get_name fail to get title text from {}".format(driver))
     return name
 
 
+# Function returns all the text in input web page
 def get_page(driver):
     ans = []
     im_word = driver.find_elements_by_class_name("view-content")
@@ -57,10 +74,11 @@ def get_page(driver):
             lang = im.text
             ans.append(lang.text)
         except:
-            print("failed")
+            print("get_page fail to get title text from {}".format(driver))
     return ans
 
 
+# Function returns the image address from given image
 def get_image(driver):
     ans = []
     image = driver.find_elements_by_tag_name("img")
@@ -70,37 +88,27 @@ def get_image(driver):
         try:
             if "https://faculty.rpi.edu/" in try2: ans.append(try2)
         except:
-            print("NO image")
+            print("get_image fail to get image address from {}".format(driver))
     return ans
 
 
-def extract(line, re):
-    ans = []
-    if re != "":
-        for l in line:
-            try:
-                if re in line: ans.append(line.text)
-            except:
-                print("F")
-    else:
-        for _ in line:
-            try:
-                ans.append(line.text)
-            except:
-                print("F")
-    return ans
-
-
+# Function returns text line from list of selector
 def line(selector):
+    """
+
+    :param selector: List
+    :return: List
+    """
     ans = []
     for s in selector:
         try:
             ans.append(s.text)
         except:
-            print("No")
+            print("line unable to get test from input selector")
     return ans
 
 
+# Function returns urls get from selector
 def address(selector):
     ans = []
     for s in selector:
@@ -108,40 +116,33 @@ def address(selector):
             x = s.get_attribute('href')
             ans.append(x)
         except:
-            print("No")
+            print("address unable to get address from input selector")
     return ans
 
 
+# Wrapper function that collect all information from a single professor page
 def get_people(url):
     try:
         driver = get_driver(url)
     except:
         return dict()
 
-    page = dict()
-    words = get_page(driver)
-
     ew = line(driver.find_elements_by_tag_name("a"))
     # print(ew)
 
     email = []
     for e in ew:
-        if (e.find("@") != -1): email.append(e)
-    # print(email)
+        if e.find("@") != -1:
+            email.append(e)
 
     webpage = []
     for w in ew:
-        if ("http://" in w): webpage.append(w)
-    # print(webpage)
+        if "http://" in w:
+            webpage.append(w)
 
     td = line(driver.find_elements_by_css_selector(".views-field.views-field-field-title"))
-    if (len(td) > 0): retd = td[0].split(",")
-    # print(retd)
-    # retd = []
-    # try:
-    # retd = td.split(",")
-    # except:
-    # print("fail")
+    if len(td) > 0:
+        retd = td[0].split(",")
 
     title = []
     department = []
@@ -149,17 +150,14 @@ def get_people(url):
         title.append(retd[0])
         for i in range(1, len(retd)):
             department.append(retd[i].replace(" ", ""))
-    # print(title)
-    # print(department)
 
+    # Get required info from web page
     focus = line(driver.find_elements_by_css_selector(".views-field.views-field-field-focus-area"))
     education = line(driver.find_elements_by_css_selector(".views-field.views-field-field-education"))
     biography = line(driver.find_elements_by_css_selector(".views-field.views-field-field-biography"))
 
-    # print(focus)
-    # print(education)
-    # print(biography)
-
+    # Assign info into dict
+    page = dict()
     page["url"] = url
     page["name"] = get_name(driver)
     page["title"] = title
@@ -172,12 +170,13 @@ def get_people(url):
     page["image"] = get_image(driver)
 
     # Save to database
-    from info.import_data import update_prof_info
+    from info.scripts.import_data import update_prof_info
     update_prof_info(page)
     driver.quit()
     return page
 
 
+# Wrapper function that for crawling the whole RPI INFO page for professor information
 def crawler_wrapper():
     name_list = []  # <-- list of all names
 
@@ -186,10 +185,8 @@ def crawler_wrapper():
     jump = 0
 
     for t in try3:
-        # print(t)
-        # <--- uncommon will pull all list done
-        # jump += 1
-        if jump == 2: break
+        if jump == 2:
+            break
         try4 = get_url(get_driver(t), 2)
         for r in try4:
             name_list.append(r)
@@ -203,6 +200,7 @@ def crawler_wrapper():
     return people_list
 
 
+# Start the function
 if __name__ == "__main__":
 
     json_list = crawler_wrapper()

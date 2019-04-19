@@ -91,7 +91,8 @@ class ProfAndCourses(models.Model):
         get_latest_by = ['updated_at']
 
     @staticmethod
-    def search_test(kw):
+    def search_course_by_prof(kw):
+        # print(kw)
         result_1 = ProfAndCourses.objects.filter(prof__icontains=kw)
         result_2 = list(result_1.values("course_code"))
         # print(result_2)
@@ -100,13 +101,28 @@ class ProfAndCourses(models.Model):
             if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
                 result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
         # result_3 = list(result_3.values())
-        for x in result_3:
-            print(x['title'])
+        # for x in result_3:
+        #     print(x['title'])
+        return result_3
+
+    @staticmethod
+    def search_prof_by_dept(dept, name):
+        result_1 = ProfAndCourses.objects.filter(dept__iexact=dept).filter(prof__icontains=name)
+        # list of professors in the specified dept found
+        result_1 = list(result_1.values("prof"))
+        result_2 = ProfInfo.search_prof_tool(name)
+        result_3 = []
+        for x in result_2:
+            for y in result_1:
+                if x["name"].lower() in y["prof"].lower():
+                    result_3.append(x)
+                    break
+        # print(result_3)
         return result_3
 
 
 class RelatedPages(models.Model):
-    links = models.URLField()
+    links = models.URLField(max_length=512)
     title = models.TextField(blank=True, null=True)
     course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
     # Update time
