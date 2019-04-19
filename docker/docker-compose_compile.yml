@@ -30,19 +30,21 @@ services:
   selenium:
     image: selenium/standalone-chrome
     container_name: selenium01
-    expose: 
+    expose:
       - "4444"
     networks:
       - backend
 
 
   djangosdd:
-    image: chin39/django_project
+    build:
+      context: .
+      dockerfile: config/docker/django/Dockerfile
     container_name: django01
     command: sh -c '/scripts/start_up.sh dbsdd'
     depends_on:
       - dbsdd
-      - selenium
+      - selenium    
     volumes:
       - ./scripts:/scripts
       - ./project:/src
