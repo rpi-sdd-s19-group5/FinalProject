@@ -15,17 +15,17 @@ if 'setup' in dir(django):
 # convert json to dict format
 def json_to_dict():
     results = []
-    #opens the json file
+    # opens the json file
     with open("19Spring.json") as json_file:
-        #load stuff
+        # load stuff
         data = json.load(json_file)
-        #skipping the first 9 rows because of the data structure
+        # skipping the first 9 rows because of the data structure
         for x in range(9, len(data) - 1):
             # print(data[x])
-            #if it's an empty row
+            # if it's an empty row
             if len(data[x]) == 0:
                 continue
-            #otherwise we'll start reading stuff
+            # otherwise we'll start reading stuff
             else:
                 entry = {}
                 entry["dept"] = data[x]["Subj"].strip()
@@ -61,7 +61,7 @@ def json_to_dict():
                 )
     # update faculty & course relation in database
     for entry in results:
-        #insert stuff into the database
+        # insert stuff into the database
         ProfAndCourses().objects.update_or_create(
             course_code=entry["course_code"], dept=entry["dept"], prof=entry["prof"], code_digit=entry["code_digit"],
             credit=entry["credit"],
