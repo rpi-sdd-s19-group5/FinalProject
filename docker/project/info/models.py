@@ -45,7 +45,7 @@ class CourseInfo(models.Model):
             print("order3")
             vector = SearchVector('title', weight = 'A') + SearchVector('description', weight = 'C')
             query = SearchQuery(kw)
-            result = result.annotate(rank = SearchRank(vector, query)).order_by('-rank')
+            result = result.annotate(rank = SearchRank(vector, query)).order_by('-rank', 'course_code')
         # for x in range(0, len(result)):
         #     print(result[x].title)
         result_2 = list(result.values())
