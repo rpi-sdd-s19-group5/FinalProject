@@ -150,6 +150,7 @@ def prof_detail(request, name, db_id):
     else:
         return Http404('Prof not found')
     courses = ProfAndCourses.search_course_by_prof(name)
+
     # show the courses taught by faculty
     context = {'prof_info': prof, 'prof_course': courses}
     return render(request, 'polls/faculty.html', context)
