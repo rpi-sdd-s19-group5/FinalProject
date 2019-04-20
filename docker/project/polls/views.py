@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 
-from info.models import CourseInfo, ProfAndCourses
+from info.models import CourseInfo, ProfAndCourses, ArchivedPages
 from info.models import ProfInfo
 from info.scripts.util_functions import search_related_links
 
@@ -83,8 +83,10 @@ def course_detail(request, name_num):
     if len(course) == 1:
         # give related links to the user
         related_links = search_related_links(course[0])
+        archived_links = ArchivedPages.objects.filter(course_id=course[0])
         context = {'course_info': course[0],
-                   'related_links': related_links}
+                   'related_links': related_links,
+                   'archived_links': archived_links}
         return render(request, 'polls/course.html', context)
     else:
         return Http404('Course not found')
