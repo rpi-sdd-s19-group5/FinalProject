@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 
 
 # Create your models here.
@@ -13,6 +14,16 @@ class CourseInfo(models.Model):
     credit_hours = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __eq__(self, other):
+        """
+
+        :type other: CourseInfo
+        """
+        if not isinstance(other, CourseInfo):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.id == other.id
 
     @staticmethod
     def search_course_tool(kw, dept_kw, sort_option=1):
@@ -38,8 +49,13 @@ class CourseInfo(models.Model):
             print("order1")
             result = result.order_by('title')
         elif sort_option == "2":
-            print("order")
+            print("order2")
             result = result.order_by('course_code')
+        elif sort_option == "3":
+            print("order3")
+            vector = SearchVector('title', weight='A') + SearchVector('description', weight='C')
+            query = SearchQuery(kw)
+            result = result.annotate(rank=SearchRank(vector, query)).order_by('-rank', 'course_code')
         # for x in range(0, len(result)):
         #     print(result[x].title)
         result_2 = list(result.values())
@@ -92,17 +108,13 @@ class ProfAndCourses(models.Model):
 
     @staticmethod
     def search_course_by_prof(kw):
-        # print(kw)
+        # Search course by professor information from sis
         result_1 = ProfAndCourses.objects.filter(prof__icontains=kw)
         result_2 = list(result_1.values("course_code"))
-        # print(result_2)
         result_3 = []
         for x in result_2:
             if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
                 result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
-        # result_3 = list(result_3.values())
-        # for x in result_3:
-        #     print(x['title'])
         return result_3
 
     @staticmethod

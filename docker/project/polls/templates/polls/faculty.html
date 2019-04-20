@@ -46,7 +46,11 @@
                 {% endif %}
             </div>
         </div>
-        <img src="{{ prof_info.image }}" style="max-width: 200px;max-height: 200px">
+        {% if prof_info.image %}
+            <img src="{{ prof_info.image }}" style="max-width: 200px;max-height: 200px" alt="">
+        {% else %}
+           Image Missing
+        {% endif %}
         <div class="row">
             <div class="col-auto" style="padding-top: 20px;">
                 <h6 style="font-weight: bold;">Contact:</h6>

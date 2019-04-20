@@ -34,20 +34,21 @@
                     </div>
                     <div class="col-auto">
                         <label>
-                            <input type="text" value="{{ search_content }}" placeholder="Course" name="search_content"
+                            <input type="text" value="{{ search_content }}" placeholder="Course"
+                                   name="search_content"
                                    style="height: 38px; width: 400px;">
                         </label>
 
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-danger"
+                        <button id="search_button" class="btn btn-danger"
                                 style="background-color: rgb(153, 0, 0); border-color: rgb(153, 0, 0);">Search
                         </button>
                     </div>
                     <div class="col-auto">
                         <label>
-                            <select id="select" name="sort" class="custom-select">
-                                <option value="1">Sort by: Alphabet</option>
+                            <select id="select" name="sort" onchange="jump();" class="custom-select">
+                                <option value="1">sort by: alphabet</option>
                                 <option value="2">Sort by: Course Code</option>
                                 <option value="3">Sort by: Relevance</option>
                             </select>
@@ -145,6 +146,12 @@
         });
         onload = function () {
             document.getElementById("select").selectedIndex = {{ sort_option|slugify }};
+        };
+
+
+        function jump() {
+            console.log("233");
+            document.getElementById("search_button").click();
         }
 
 
