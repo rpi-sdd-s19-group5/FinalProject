@@ -25,9 +25,6 @@ class CourseInfo(models.Model):
             return NotImplemented
         return self.title == other.title and self.course_code == other.course_code
 
-    def __hash__(self):
-        hash((self.id, self.title))
-
     @staticmethod
     def search_course_tool(kw, dept_kw, sort_option=1):
         kw = kw.upper()
@@ -112,13 +109,21 @@ class ProfAndCourses(models.Model):
     @staticmethod
     def search_course_by_prof(kw):
         # Search course by professor information from sis
-        result_1 = ProfAndCourses.objects.filter(prof__icontains=kw)
-        result_2 = list(result_1.values("course_code"))
-        result_3 = []
-        for x in result_2:
-            if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
-                result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
-        return list(set(result_3))
+        result_courses = ProfAndCourses.objects.filter(prof__icontains=kw)
+        all_course_codes = list(result_courses.values("course_code"))
+        course_code_set = set()
+
+        # Remove Duplicated
+        for course_code in all_course_codes:
+            course_code_set.add(course_code['course_code'])
+
+        all_courses = []
+        for course_code in course_code_set:
+            # Search all course code in database and add into list
+            related_courses = CourseInfo.objects.filter(course_code__icontains=course_code).values()
+            if related_courses.count() != 0:
+                all_courses.append(related_courses[0])
+        return all_courses
 
     @staticmethod
     def search_prof_by_dept(dept, name):
