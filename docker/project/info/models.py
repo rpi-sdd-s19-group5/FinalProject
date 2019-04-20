@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.utils import timezone
 
 
 # Create your models here.
@@ -148,3 +149,12 @@ class RelatedPages(models.Model):
     # Update time
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+    updated_time = models.DateTimeField(default=timezone.now, blank=True)
+
+class ArchivedPages(models.Model):
+    links = models.URLField(max_length=512)
+    title = models.TextField(blank=True, null=True)
+    course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    updated_time = models.DateTimeField(default=timezone.now, blank=True)
