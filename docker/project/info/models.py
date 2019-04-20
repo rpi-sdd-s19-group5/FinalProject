@@ -23,7 +23,10 @@ class CourseInfo(models.Model):
         if not isinstance(other, CourseInfo):
             # don't attempt to compare against unrelated types
             return NotImplemented
-        return self.id == other.id
+        return self.title == other.title and self.course_code == other.course_code
+
+    def __hash__(self):
+        hash((self.id, self.title))
 
     @staticmethod
     def search_course_tool(kw, dept_kw, sort_option=1):
