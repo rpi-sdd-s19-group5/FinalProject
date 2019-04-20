@@ -37,20 +37,20 @@ def search_related_links(course_info):
                 # if any entry is updated, put the old entry into archive table, and save the new one
                 print(RelatedPage.title)
                 print(url[0])
-                #if (RelatedPage.title != url[0]) or (RelatedPage.links != url[1]):
+                # if (RelatedPage.title != url[0]) or (RelatedPage.links != url[1]):
                 print('updating archive')
                 # delete oldest archived link
-                if (len(ArchivedPages.objects.all()) == 5) and RelatedPage.updated_time < seven_days_ago :
+                if (len(ArchivedPages.objects.all()) == 5) and RelatedPage.updated_time < seven_days_ago:
                     (ArchivedPages.objects.filter(course=course_info).order_by('updated_at'))[0].delete()
                     # put new entry into archive
                 if RelatedPage.updated_time < seven_days_ago:
-                    ArchivedPages.objects.update_or_create(links=RelatedPage.links, title=RelatedPage.title, course=RelatedPage.course, updated_time=RelatedPage.updated_time)
+                    ArchivedPages.objects.update_or_create(links=RelatedPage.links, title=RelatedPage.title,
+                                                           course=RelatedPage.course,
+                                                           updated_time=RelatedPage.updated_time)
                     # update list of existing latest links
                     RelatedPage.title = url[0]
                     RelatedPage.links = url[1]
                     RelatedPage.save()
-
-
 
         # Update links lists
         related_links = RelatedPages.objects.filter(course=course_info, updated_at__gte=seven_days_ago).order_by('id')

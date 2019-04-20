@@ -68,8 +68,8 @@
         <div class="row">
             <div class="col-auto">
                 <h6 class="fontType">Archived Links:</h6>
-                {% for related_link in related_links %}
-                    <p class="display"><a href="{{ related_link.links }}">{{ related_link.title }}</a></p>
+                {% for archived_link in archived_links %}
+                    <p class="display"><a href="{{ archived_link.links }}">{{ archived_link.title }}</a></p>
                 {% endfor %}
             </div>
         </div>
