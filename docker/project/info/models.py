@@ -115,7 +115,7 @@ class ProfAndCourses(models.Model):
         for x in result_2:
             if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
                 result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
-        return result_3
+        return list(set(result_3))
 
     @staticmethod
     def search_prof_by_dept(dept, name):
