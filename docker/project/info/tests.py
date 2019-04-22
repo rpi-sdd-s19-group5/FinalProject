@@ -1,7 +1,8 @@
 from django.test import TestCase
-
-from info.models import CourseInfo, ProfInfo
-
+from datetime import timedelta
+from django.utils import timezone
+from info.models import CourseInfo, ProfInfo, RelatedPages, ArchivedPages
+from info.scripts.util_functions import search_related_links
 
 class SimpleTestCase(TestCase):
     # this test case tests searching in a specific department with a keyword
@@ -216,4 +217,36 @@ class SimpleTestCase(TestCase):
         # there are 3 results in total
         self.assertEqual(len(search_result), 3)
         ProfInfo.objects.all().delete()
+
+    # this test case tests if archived links function works properly
+    def test_ArchiveLink(self):
+        ArchivedPages.objects.all().delete()
+        RelatedPages.objects.all().delete()
+        CourseInfo.objects.update_or_create(
+            title="Data Structures",
+            dept="TEST",
+            course_code="CSCI 1200",
+            description="This is a test abracadabra",
+            prerequisites="N/A",
+            offered="Never", cross_listed="Delete me", credit_hours=0)
+        print(CourseInfo.objects.all())
+        self.assertTrue(len(CourseInfo.objects.filter(course_code__icontains='CSCI 1200')) == 1, 'more fucked up')
+        search_related_links(CourseInfo.objects.filter(course_code__icontains='CSCI 1200')[0])
+        for item in RelatedPages.objects.all():
+            item.updated_time = timezone.now() - timedelta(days=10)
+            print(item.updated_time)
+            item.save()
+        for item in RelatedPages.objects.all():
+            print(item.updated_time)
+
+        search_related_links(CourseInfo.objects.filter(course_code='CSCI 1200')[0])
+        self.assertTrue(ArchivedPages.objects.all()[0].updated_time < (timezone.now() - timedelta(days=8)), 'fucked up')
+        self.assertTrue(ArchivedPages.objects.all()[1].updated_time < (timezone.now() - timedelta(days=8)), 'fucked up')
+        self.assertTrue(ArchivedPages.objects.all()[2].updated_time < (timezone.now() - timedelta(days=8)), 'fucked up')
+        self.assertTrue(ArchivedPages.objects.all()[3].updated_time < (timezone.now() - timedelta(days=8)), 'fucked up')
+        self.assertTrue(ArchivedPages.objects.all()[4].updated_time < (timezone.now() - timedelta(days=8)), 'fucked up')
+
+
+
+
 

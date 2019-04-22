@@ -14,7 +14,7 @@ done
 
 >&2 echo "Postgres is up - executing command"
 
-python manage.py makemigrations
-python manage.py migrate
+# python manage.py makemigrations --merge
+# python manage.py migrate
 python manage.py collectstatic --noinput
 gunicorn DjangoTest.wsgi -b 0.0.0.0:8080 --reload --workers 3

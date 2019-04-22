@@ -46,7 +46,11 @@
                 {% endif %}
             </div>
         </div>
-        <img src="{{ prof_info.image }}" style="max-width: 200px;max-height: 200px">
+        {% if prof_info.image %}
+            <img src="{{ prof_info.image }}" style="max-width: 200px;max-height: 200px" alt="">
+        {% else %}
+           Image Missing
+        {% endif %}
         <div class="row">
             <div class="col-auto" style="padding-top: 20px;">
                 <h6 style="font-weight: bold;">Contact:</h6>
@@ -84,10 +88,11 @@
         <div class="row">
             <div class="col-auto" style="padding-top: 20px;">
                 <h6 style="font-weight: bold;">Courses:</h6>
-                {% if prof_course.count == 0 %}
+                {% if prof_course %}
                     {% for course in prof_course %}
                         <div class="col-auto">
-                            <a href="{% url "course_detail" name_num=course.course_code %}">
+                            <a style="color: rgb(153, 0, 0);"
+                               href="{% url "course_detail" name_num=course.course_code %}">
                                 <h5>{{ course.course_code }} {{ course.title }}</h5></a>
                             <p class="colorFont" style="overflow: hidden;
                 text-overflow: ellipsis;

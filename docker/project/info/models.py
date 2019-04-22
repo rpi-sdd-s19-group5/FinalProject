@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.utils import timezone
 
 
 # Create your models here.
@@ -13,6 +15,16 @@ class CourseInfo(models.Model):
     credit_hours = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __eq__(self, other):
+        """
+
+        :type other: CourseInfo
+        """
+        if not isinstance(other, CourseInfo):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.title == other.title and self.course_code == other.course_code
 
     @staticmethod
     def search_course_tool(kw, dept_kw, sort_option=1):
@@ -38,8 +50,13 @@ class CourseInfo(models.Model):
             print("order1")
             result = result.order_by('title')
         elif sort_option == "2":
-            print("order")
+            print("order2")
             result = result.order_by('course_code')
+        elif sort_option == "3":
+            print("order3")
+            vector = SearchVector('title', weight='A') + SearchVector('description', weight='C')
+            query = SearchQuery(kw)
+            result = result.annotate(rank=SearchRank(vector, query)).order_by('-rank', 'course_code')
         # for x in range(0, len(result)):
         #     print(result[x].title)
         result_2 = list(result.values())
@@ -91,24 +108,53 @@ class ProfAndCourses(models.Model):
         get_latest_by = ['updated_at']
 
     @staticmethod
-    def search_test(kw):
-        result_1 = ProfAndCourses.objects.filter(prof__icontains=kw)
-        result_2 = list(result_1.values("course_code"))
-        # print(result_2)
+    def search_course_by_prof(kw):
+        # Search course by professor information from sis
+        result_courses = ProfAndCourses.objects.filter(prof__icontains=kw)
+        all_course_codes = list(result_courses.values("course_code"))
+        course_code_set = set()
+
+        # Remove Duplicated
+        for course_code in all_course_codes:
+            course_code_set.add(course_code['course_code'])
+
+        all_courses = []
+        for course_code in course_code_set:
+            # Search all course code in database and add into list
+            related_courses = CourseInfo.objects.filter(course_code__icontains=course_code).values()
+            if related_courses.count() != 0:
+                all_courses.append(related_courses[0])
+        return all_courses
+
+    @staticmethod
+    def search_prof_by_dept(dept, name):
+        result_1 = ProfAndCourses.objects.filter(dept__iexact=dept).filter(prof__icontains=name)
+        # list of professors in the specified dept found
+        result_1 = list(result_1.values("prof"))
+        result_2 = ProfInfo.search_prof_tool(name)
         result_3 = []
         for x in result_2:
-            if CourseInfo.objects.filter(course_code__icontains=x['course_code']).values():
-                result_3.append(list(CourseInfo.objects.filter(course_code__icontains=x['course_code']).values())[0])
-        # result_3 = list(result_3.values())
-        for x in result_3:
-            print(x['title'])
+            for y in result_1:
+                if x["name"].lower() in y["prof"].lower():
+                    result_3.append(x)
+                    break
+        # print(result_3)
         return result_3
 
 
 class RelatedPages(models.Model):
-    links = models.URLField()
+    links = models.URLField(max_length=512)
     title = models.TextField(blank=True, null=True)
     course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
     # Update time
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+    updated_time = models.DateTimeField(default=timezone.now, blank=True)
+
+class ArchivedPages(models.Model):
+    links = models.URLField(max_length=512)
+    title = models.TextField(blank=True, null=True)
+    course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    updated_time = models.DateTimeField(default=timezone.now, blank=True)

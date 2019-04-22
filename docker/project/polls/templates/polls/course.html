@@ -65,6 +65,18 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="row">
+            <div class="col-auto">
+                <h6 class="fontType">Archived Links:</h6>
+                {% if archived_links %}
+                    {% for archived_link in archived_links %}
+                        <p class="display"><a href="{{ archived_link.links }}">{{ archived_link.title }}</a></p>
+                    {% endfor %}
+                {% else %}
+                    <p class="display">Currently does not exist</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
     </body>
 {% endblock %}
