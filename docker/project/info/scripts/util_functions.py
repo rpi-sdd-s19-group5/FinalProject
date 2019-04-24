@@ -17,12 +17,17 @@ def search_related_links(course_info):
 
     # if database doesn't have enough related_links or (some of the) links are outdated
     if related_links.count() != 5:
+        print("# of non-outdated related pages: " + str(len(related_links)))
+
         print('link expired?')
         title = course_info.course_code + " " + course_info.title
+        global results
         results = search(title)[0:5]
         for item in results:
             print(item[0])
+        global related_links2
         related_links2 = RelatedPages.objects.filter(course=course_info).order_by('updated_at')
+        print("# of total related pages: " + str(len(related_links2)))
 
         # if database doesn't have enough related_links (including outdated ones)
         if related_links2.count() != 5:
